@@ -1,9 +1,11 @@
 #!/usr/bin/env Rscript
 
 get_version_from_git <- function() {
-  tag <- system2("git", c("describe"), stdout=TRUE, stderr=TRUE)
+  tag <- system2("git", c("describe", "--tags", "--match", "v*"),
+                 stdout=TRUE, stderr=TRUE)
   is_clean <- system2("git", c("diff-index", "--quiet", tag)) == 0
   tt <- sub("v", "", tag, fixed=TRUE)
+  tt <- paste(strsplit(tt, "-")[[1]][1:2], collapse="-")
   if (!is_clean)
     tt <- sub("-.*", sprintf("-%i", as.integer(Sys.time())), tt)
   tt
