@@ -36,7 +36,7 @@ SEXP do_nothing(SEXP a, SEXP b) {
 
 SEXP do_microtiming(SEXP s_times, SEXP s_expr, SEXP s_rho) {
     nanotime_t start, end, overhead;
-    int i;
+    int i, n_under_overhead = 0;
     SEXP s_ret;
     double *ret;
     volatile SEXP s_tmp;
@@ -54,9 +54,10 @@ SEXP do_microtiming(SEXP s_times, SEXP s_expr, SEXP s_rho) {
         start = get_nanotime();
         s_tmp = do_nothing(s_expr, s_rho);
         end = get_nanotime();
-        if ((end - start) > 0 && 
-            (end - start) < overhead)
-            overhead = end - start;
+
+        const nanotime_t diff = end - start;
+        if (diff > 0 && diff < overhead)
+            overhead = diff;
     }
 
     /* Actual timing... */
@@ -64,12 +65,31 @@ SEXP do_microtiming(SEXP s_times, SEXP s_expr, SEXP s_rho) {
         start = get_nanotime();
         s_tmp = eval(s_expr, s_rho);
         end = get_nanotime();
-        ret[i] = end - start - overhead;
         
+        const nanotime_t diff = end - start;
+        if (diff < overhead) {
+            ret[i] = R_NaReal;
+            n_under_overhead++;
+        } else {
+            ret[i] = diff - overhead;
+        }
+
         /* Housekeeping */
         R_CheckUserInterrupt();
         /* R_gc(); */
     }
-    UNPROTECT(1);
+
+    /* Issue waring if we observed some timings below the estimated
+     * overhead.
+     */
+    if (n_under_overhead > 0) {
+        if (n_under_overhead == 1) {
+            warning("Estimated overhead was greater than measured evaluation time for 1 run.");
+        } else {
+            warning("Estimated overhead was greater than measured evaluation time for %i runs.", n_under_overhead);
+        }
+    }
+
+    UNPROTECT(1); /* s_ret */
     return s_ret;
 }

@@ -26,14 +26,21 @@
 ##' Solaris the \code{gethrtime} function. Finally on MacOS X the,
 ##' undocumented, \code{mach_absolute_time} function is used to avoid
 ##' a dependency on the CoreServices Framework.
+##'
+##' Before evaluating each expression \code{times} times, the overhead
+##' of calling the timing functions and the C function call overhead
+##' are estimated. This estimated overhead is subtracted from each
+##' measured evaluation time. Should the resulting timing be negative,
+##' a warning is thrown and the respective value is replaced by
+##' \code{NA}.
 ##' 
 ##' @param ... Expressions to benchmark.
 ##' @param list List of unevaluated expression to benchmark.
 ##' @param times Number of times to evaluate the expression.
 ##'
-##' @return Object of class microbenchmark, a matrix with one column
-##'   per exoression. Each row contains the time it took to evaluate the
-##'   respective expression one time in nanoseconds.
+##' @return Object of class \sQuote{microbenchmark}, a matrix with one
+##'   column per exoression. Each row contains the time it took to
+##'   evaluate the respective expression one time in nanoseconds.
 ##'
 ##' @seealso \code{\link{print.microbenchmark}} to display,
 ##' \code{\link{boxplot.microbenchmark}} or
@@ -154,6 +161,7 @@ print.microbenchmark <- function(x, unit=c("ns", "ms", "eps", "slowdown", "speed
 ##' @S3method melt microbenchmark
 ##' @method melt microbenchmark
 ##' @importFrom reshape melt
+##'
 ##' @author Olaf Mersmann \email{olafm@@datensplitter.net}
 melt.microbenchmark <- function(data,
                                 unit=c("ns", "ms", "eps", "slowdown", "speedup"),
