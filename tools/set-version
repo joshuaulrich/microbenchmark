@@ -11,4 +11,4 @@ get_version_from_git <- function() {
   
 desc <- read.dcf("pkg/DESCRIPTION")
 desc[,"Version"] <- get_version_from_git()
-write.dcf(desc, file="skel/DESCRIPTION")
+write.dcf(desc, file="pkg/DESCRIPTION")
