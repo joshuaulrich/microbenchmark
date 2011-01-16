@@ -1,6 +1,7 @@
 Package: microbenchmark
-Title: Nanosecond accurate timing functions.
-Description: For internal use at the TU Dortmund.
+Title: Sub microsecond accurate timing functions.
+Description: Provides infrastructure to accurately measure and compare
+  the execution time of R expressions.
 Author: Olaf Mersmann <olafm@datensplitter.net>
 Maintainer: Olaf Mersmann <olafm@datensplitter.net>
 License: file LICENSE
