@@ -1,0 +1,10 @@
+Package: microbenchmark
+Title: Nanosecond accurate timing functions.
+Description: For internal use at the TU Dortmund.
+Author: Olaf Mersmann <olafm@datensplitter.net>
+Maintainer: Olaf Mersmann <olafm@datensplitter.net>
+License: file LICENSE
+Imports: graphics, ggplot2, reshape
+LazyData: yes
+Version: 0.0-0
+

@@ -1,0 +1,2 @@
+PKG_LIBS_Linux = -lrt
+PKG_LIBS = $(PKG_LIBS_$(shell uname -s))
