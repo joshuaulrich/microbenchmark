@@ -84,9 +84,10 @@ SEXP do_microtiming(SEXP s_times, SEXP s_expr, SEXP s_rho) {
      */
     if (n_under_overhead > 0) {
         if (n_under_overhead == 1) {
-            warning("Estimated overhead was greater than measured evaluation time for 1 run.");
+            warning("Estimated overhead was greater than measured evaluation time inr 1 run.");
         } else {
-            warning("Estimated overhead was greater than measured evaluation time for %i runs.", n_under_overhead);
+            warning("Estimated overhead was greater than measured evaluation time in %i runs.", 
+                    n_under_overhead);
         }
     }
 
