@@ -34,7 +34,7 @@ SEXP do_nothing(SEXP a, SEXP b) {
     return a;
 }
 
-SEXP do_microtiming(SEXP s_times, SEXP s_expr, SEXP s_rho) {
+SEXP do_microtiming(SEXP s_times, SEXP s_expr, SEXP s_rho, SEXP s_warmup) {
     nanotime_t start, end, overhead;
     int i, n_under_overhead = 0;
     SEXP s_ret;
@@ -42,6 +42,8 @@ SEXP do_microtiming(SEXP s_times, SEXP s_expr, SEXP s_rho) {
     volatile SEXP s_tmp;
 
     UNPACK_INT(s_times, times);
+    UNPACK_INT(s_warmup, warmup);
+
     if(!isEnvironment(s_rho)) 
         error("'s_rho' should be an environment");
 
@@ -50,7 +52,7 @@ SEXP do_microtiming(SEXP s_times, SEXP s_expr, SEXP s_rho) {
 
     /* Estimate minimal overhead and warm up the machine ... */
     overhead = 1 << 31;
-    for (i = 0; i < 1 << 18; ++i) {
+    for (i = 0; i < warmup; ++i) {
         start = get_nanotime();
         s_tmp = do_nothing(s_expr, s_rho);
         end = get_nanotime();

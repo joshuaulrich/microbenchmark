@@ -1,5 +1,6 @@
-library("microbenchmark")
 library("methods")
+library("proto")
+library("microbenchmark")
 
 messagef <- function(msg, ...)
   message(sprintf(msg, ...))
@@ -25,7 +26,6 @@ s3_fun.s3_object <- function(x, ...)
 ## S4 style method call:
 setClass("s4_object", representation(a="numeric", b="character"))
 
-
 s4_object <- function()
   new("s4_object", a=1, b="bam")
 
@@ -38,12 +38,27 @@ for (i in 1:200) {
   setMethod("s4_fun", n, function(x, ...) NULL)
 }
 
+## Proto style methods call:
+proto_object <- proto(expr={
+  a <- 1
+  b <- "bam"
+  proto_fun <- function(., ...) NULL
+})
+
 ## Micro benchmark of call speed:
-n <- 1000x00L
+n <- 1000L
 op <- plain_object()
 o3 <- s3_object()
 o4 <- s4_object()
+po <- proto_object$proto()
+ppo <- proto_object$proto({
+  roto_fun <- function(., ...) NULL
+})
 
-speed <- microbenchmark(plain_fun(op), s3_fun(o3), s4_fun(o4), times=n)
-print(speed)
+pppo <- proto_object$proto()$proto()$proto()$proto()$proto()
 
+speed <- microbenchmark(plain_fun(op), s3_fun(o3),
+                        s4_fun(o4),
+                        po$proto_fun(), ppo$proto_fun(), pppo$proto_fun(),
+                        times=n)
+print(speed, unit="eps")

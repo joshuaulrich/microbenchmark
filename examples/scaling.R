@@ -9,4 +9,4 @@ for (n in 10^(3:7)) {
 
 f <- sum
 res <- microbenchmark(list=exprs, times=100L)
-print(res, "slowdown")
+print(relative_slowdown(res))

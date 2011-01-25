@@ -1,3 +1,5 @@
 pkg/
 install.log
 roxygen.log
+*.so
+*.o

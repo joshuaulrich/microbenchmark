@@ -15,4 +15,4 @@ n <- 10000L
 res <- microbenchmark(f0(), f1(1), f2(1, 1), f3(1, 1, 1),
                       f10(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
                       times=n)
-print(res, unit="slowdown")
+print(relative_slowdown(res))

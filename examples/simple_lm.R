@@ -10,4 +10,4 @@ res <- microbenchmark(lm(weight ~ group),
                       rlm(weight ~ group),
                       lqs(weight ~ group),
                       times=300L)
-print(res, "slowdown")
+print(relative_slowdown(res))
