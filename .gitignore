@@ -1,4 +1,5 @@
 pkg/
+pkg.Rcheck/
 install.log
 roxygen.log
 *.so
