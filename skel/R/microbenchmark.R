@@ -1,4 +1,4 @@
-##' @useDynLib microbenchmark do_microtiming
+##' @useDynLib microbenchmark do_microtiming do_microtiming_precision
 {}
 
 ##' Sub-millisecond accurate timing of expression evaluation.
@@ -19,6 +19,19 @@
 ##' profiler to detect hot spots and consider rewriting them in C/C++
 ##' or FORTRAN.
 ##'
+##' The \code{control} list can contain the following entries:
+##' \describe{
+##' \item{order}{the order in which the expressions are evaluated.
+##'   \dQuote{random} (the default) randomizes the execution order,
+##'   \dQuote{inorder} executes each expression in order and
+##'   \dQuote{block} executes all repetitions of each expression
+##'     as one block.}
+##' \item{warmup}{the number of warm-up iterations performed before
+##'   the actual benchmark. These are used to estimate the timing
+##'   overhead as well as spinning up the processor from any sleep
+##'   or idle states it might be in. The default value is 2^}
+##' }
+##' 
 ##' @note Depending on the underlying operating system, different
 ##' methods are used for timing. On Windows the
 ##' \code{QueryPerformanceCounter} interface is used to measure the
@@ -38,19 +51,13 @@
 ##' @param list List of unevaluated expression to benchmark.
 ##' @param times Number of times to evaluate the expression.
 ##' @param control List of control arguments. See Details.
-##' 
+##'
 ##' @return Object of class \sQuote{microbenchmark}, a matrix with one
 ##'   column per exoression. Each row contains the time it took to
 ##'   evaluate the respective expression one time in nanoseconds.
 ##'
-##' @seealso \code{\link{print.microbenchmark}} to display,
-##' \code{\link{boxplot.microbenchmark}} or
-##' \code{\link{ggplot.microbenchmark}} to plot and
-##' \code{\link{as.data.frame.microbenchmark}} or
-##' \code{\link{melt.microbenchmark}} to convert \code{microbenchmark}
-##' objects and \code{\link{print.microbenchmark}},
-##' \code{\link{relative_slowdown}} and \code{\link{relative_speedup}}
-##' to print the results in various formats.
+##' @seealso \code{\link{print.microbenchmark}} to display and
+##' \code{\link{boxplot.microbenchmark}} to plot the results.
 ##' 
 ##' @examples
 ##' ## Measure the time it takes to dispatch a simple function call
@@ -66,8 +73,8 @@
 ##'
 ##' ## Pretty plot:
 ##' if (require("ggplot2")) {
-##'   plt <- ggplot(res)
-##'   plt <- plt + geom_line() + scale_y_log10()
+##'   plt <- ggplot2::qplot(y=time, data=res, colour=expr)
+##'   plt <- plt + ggplot2::scale_y_log10()
 ##'   print(plt)
 ##' }
 ##' 
@@ -76,7 +83,8 @@
 microbenchmark <- function(..., list=NULL, times=100L, control=list()) {
   stopifnot(times == as.integer(times))
 
-  control[["warmup"]] <- coalesce(control[["warmup"]], 2^18)
+  control[["warmup"]] <- coalesce(control[["warmup"]], 2^18L)
+  control[["order"]] <- coalesce(control[["order"]], "random")
 
   stopifnot(as.integer(control$warmup) == control$warmup)
   
@@ -87,29 +95,38 @@ microbenchmark <- function(..., list=NULL, times=100L, control=list()) {
   
   exprs <- c(exprs, list)
   nm <- names(exprs)
-  nm[nm == ""] <- as.character(exprs)[nm == ""]
+  exprnm <- sapply(exprs, deparse)
+  if (is.null(nm))
+    nm <- exprnm
+  else
+    nm[nm == ""] <- exprnm[nm == ""]
   names(exprs) <- nm
 
   ## GC first
   gc(FALSE)
 
-  ## Run benchmark (returns cumulative time)
-  res <- matrix(0, nrow=times, ncol=length(exprs))
-  for (i in 1:length(exprs)) {
-    res[, i] <- .Call(do_microtiming, as.integer(times),
-                      exprs[[i]], parent.frame(),
-                      as.integer(control$warmup))
-  }
+  o <- if (control$order == "random")
+    sample(rep(seq_along(exprs), times=times))
+  else if (control$order == "inorder")
+    rep(seq_along(exprs), times=times)
+  else if (control$order == "block")
+    rep(seq_along(exprs), each=times)
+  else
+    stop("Unknown ordering. Must be one of 'random', 'inorder' or 'block'.")
+  exprs <- exprs[o]
 
+  res <- .Call(do_microtiming, exprs, parent.frame(), as.integer(control$warmup))
+  
   ## Sanity check. Fail as early as possible if the results are
   ## rubbish.
   if (all(is.na(res)))
     .all_na_stop()
-  
-  colnames(res) <- names(exprs)
-  structure(res, class="microbenchmark")
-}
 
+  res <- data.frame(expr=nm[o], time=res)
+  class(res) <- c("microbenchmark", class(res))
+  res
+}
+  
 ##' Print \code{microbenchmark} timings.
 ##' 
 ##' The available units are nanoseconds (\code{"ns"}), microseconds
@@ -120,74 +137,19 @@ microbenchmark <- function(..., list=NULL, times=100L, control=list()) {
 ##' @param unit What unit to print the timings in.
 ##' @param ... Ignored.
 ##'
-##' @seealso \code{\link{relative_slowdown}} and
-##' \code{\link{relative_speedup}} to convert the absolute timings of
-##' a microbenchmark into relative performance values.
-##' 
+##' @seealso \code{\link{boxplot.microbenchmark}} for a plot method.
+##'
 ##' @S3method print microbenchmark
 ##' @method print microbenchmark
 ##' @author Olaf Mersmann \email{olafm@@datensplitter.net}
 print.microbenchmark <- function(x, unit="ns", ...) {
-  x <- convert_to_unit(x, unit)
-  res <- t(apply(x, 2, fivenum))
-  colnames(res) <- c("min", "lq", "median", "uq", "max")
-  cat("Unit: ", attr(x, "unit"), "\n", sep="")
+  x$time <- convert_to_unit(x$time, unit)
+  res <- aggregate(time ~ expr, x, fivenum)
+  res <- cbind(res$expr, as.data.frame(res$time))
+  colnames(res) <- c("expr", "min", "lq", "median", "uq", "max")
+  cat("Unit: ", attr(x$time, "unit"), "\n", sep="")
   print(res)
 }
-
-##' Relative speedup / slowdown of one expression compared to another.
-##'
-##' @param x An object of class \code{microbenchmark}.
-##' @param ... Currently ignored.
-##'
-##' @rdname relspeed
-##' @export
-##' @author Olaf Mersmann \email{olafm@@datensplitter.net}
-relative_slowdown <- function(x, ...) {
-  res <- t(apply(x, 2, fivenum))
-  colnames(res) <- c("min", "lq", "median", "uq", "max")
-  sweep(res, 2, apply(res, 2, min), "/")
-}
-
-##' @rdname relspeed
-##' @export
-relative_speedup <- function(x, ...) {
-  res <- t(apply(x, 2, fivenum))
-  colnames(res) <- c("min", "lq", "median", "uq", "max")
-  1/sweep(res, 2, apply(res, 2, max), "/")
-}
-
-##' Convert / melt a \code{microbenchmark} object into a
-##' \code{data.frame} ready to be \code{\link{cast}}.
-##'
-##' @param data A \code{microbenchmark} object.
-##' @param x A \code{microbenchmark} object.
-##' @param unit Unit in which the results should be plotted.
-##' @param ... Ignored.
-##' @return A \code{data.frame} with columns \sQuote{run},
-##'   \sQuote{expr} and \sQuote{value}, containing the run number,
-##'   expression (as a string) and the time in nanoseconds.
-##'
-##' @S3method melt microbenchmark
-##' @method melt microbenchmark
-##' @importFrom reshape melt
-##'
-##' @author Olaf Mersmann \email{olafm@@datensplitter.net}
-melt.microbenchmark <- function(data, unit="ns", ...) {
-  m <- melt(convert_to_unit(data, unit))
-  colnames(m) <- c("run", "expr", "value")
-  m
-}
-
-##' @return The same \code{data.frame} returned by \code{melt}.
-##' 
-##' @S3method as.data.frame microbenchmark
-##' @method as.data.frame microbenchmark
-##' @importFrom reshape melt
-##' @rdname melt.microbenchmark
-##' @author Olaf Mersmann \email{olafm@@datensplitter.net}
-as.data.frame.microbenchmark <- function(x, ...)
-  melt(x, ...)
 
 ##' Boxplot of \code{microbenchmark} timings.
 ##'
@@ -205,7 +167,7 @@ as.data.frame.microbenchmark <- function(x, ...)
 ##' 
 ##' @author Olaf Mersmann \email{olafm@@datensplitter.net}
 boxplot.microbenchmark <- function(x, unit="ns", log=TRUE, xlab, ylab, ...) {
-  data <- melt(x, unit)
+  x$time <- convert_to_unit(x$time, unit)
   timeunits <- c("ns", "us", "ms", "s")
   frequnits <- c("hz", "khz", "mhz")
   
@@ -219,7 +181,7 @@ boxplot.microbenchmark <- function(x, unit="ns", log=TRUE, xlab, ylab, ...) {
         paste("log(frequency) [", unit, "]", sep="")
       else
         paste("log(", unit, ")", sep="")
-    } else {      
+    } else {
       if (unit %in% timeunits)
         paste("time [", unit, "]", sep="")
       else if (unit %in% frequnits)
@@ -232,26 +194,7 @@ boxplot.microbenchmark <- function(x, unit="ns", log=TRUE, xlab, ylab, ...) {
   }
   ll <- if (log) "y" else ""
   
-  boxplot(value ~ expr, data=data, xlab=xlab, ylab=ylab, log=ll, ...)
-}
-
-##' ggplot method for \code{microbenchmark} objects.
-##'
-##' @param data A \code{microbenchmark} object.
-##' @param mapping Default list of aesthetic mappings.
-##' @param ... Passed to \code{\link{ggplot.data.frame}}.
-##' @S3method ggplot microbenchmark
-##' @method ggplot microbenchmark
-##'
-##' @importFrom ggplot2 aes_string
-##' @importFrom ggplot2 ggplot
-##' 
-##' @author Olaf Mersmann \email{olafm@@datensplitter.net}
-ggplot.microbenchmark <- function(data,
-                                  mapping=aes_string(x="run", y="value", colour="expr"),
-                                  ...) {
-  ndata <- as.data.frame(data)
-  ggplot(ndata, mapping, ...)
+  boxplot(time ~ expr, data=x, xlab=xlab, ylab=ylab, log=ll, ...)
 }
 
 ##' Internal helper functions that returns a generic error if timings fail.
@@ -270,13 +213,13 @@ There are several causes for this. The most likely are
    Linux this can be done using the 'cpufreq' utilities.
 
  * You have a machine with many CPU cores and the timers provided by
-   your operating system are not synchronized across cores. Best bet
-   it to peg your R package to a single core. On Linux systems, this
-   can be achieved using 'taskset'.
+   your operating system are not synchronized across cores. Your best
+   bet is it to peg your R process to a single core. On Linux systems,
+   this can be achieved using the 'taskset' utility.
 
  * Your machine is super fast. If the difference between the estimated
    overhead and the actual execution time is zero (or possibly even
-   negative), you will get this error. Sorry, your out of luck,
+   negative), you will get this error. Sorry, you're out of luck,
    benchmark complexer code.
 
 If this problem persists for you, please contact me and I will try to
@@ -300,15 +243,14 @@ resolve the issue with you."
 ##' 
 ##' @param x An \code{microbenchmark} object.
 ##' @param unit A unit of time. See details.
+##'
 ##' @return A matrix containing the converted time values with an
 ##'   attribute \code{unit} which is a printable name of the unit of
 ##'   time.
 ##'
 ##' @author Olaf Mersmann \email{olafm@@datensplitter.net}
-convert_to_unit <- function(x,
-                             unit=c("ns", "us", "ms", "s", "hz", "khz", "mhz",
-                               "eps", "slowdown", "speedup")) {
-  unit <- match.arg(unit)
+convert_to_unit <- function(x, unit=c("ns", "us", "ms", "s", "hz", "khz", "mhz", "eps")) {
+  unit <- match.arg(unit)  
   if (unit == "ns") {
     attr(x, "unit") <- "nanoseconds"
     unclass(x)
@@ -348,8 +290,28 @@ convert_to_unit <- function(x,
 ##' @return First non null element in \code{...}.
 ##'
 ##' @author Olaf Mersmann \email{olafm@@statistik.tu-dortmund.de}
-##' @export
 coalesce <- function(...) {
   isnotnull <- function(x) !is.null(x)
   Find(isnotnull, list(...))
+}
+
+##' Estimate precision of timing routines.
+##'
+##' This function is currently experimental. Its main use is to judge
+##' the quality of the underlying timer implementation of the
+##' operating system. The function measures the overhead of timing a C
+##' function call \code{rounds} times and returns all non-zero timings
+##' observed. This can be used to judge the granularity and resolution
+##' of the timing subsystem.
+##' 
+##' @param rounds Number of measurements used to estimate the precision.
+##' @param warmup Number of iterations used to warmup the CPU.
+##' @return A vector of observed non-zero timings.
+##'
+##' @author Olaf Mersmann \email{olafm@@statistik.tu-dortmund.de}
+##' @export
+microtiming_precision <- function(rounds=100L, warmup=2^18) {
+  .Call(do_microtiming_precision, parent.frame(),
+        as.integer(rounds),
+        as.integer(warmup))
 }
