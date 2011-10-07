@@ -36,13 +36,10 @@ SEXP do_nothing(SEXP a, SEXP b) {
 
 nanotime_t estimate_overhead(SEXP s_rho, int rounds) {
     int i;
-    SEXP s_expr;
-    volatile SEXP s_tmp;    
     /* Estimate minimal overhead and warm up the machine ... */
     nanotime_t start, end, overhead = 1 << 31;
     for (i = 0; i < rounds; ++i) {
         start = get_nanotime();
-        // s_tmp = do_nothing(s_expr, s_rho);
         end = get_nanotime();
 
         const nanotime_t diff = end - start;
@@ -55,10 +52,9 @@ nanotime_t estimate_overhead(SEXP s_rho, int rounds) {
 SEXP do_microtiming_precision(SEXP s_rho, SEXP s_times, SEXP s_warmup) {
     UNPACK_INT(s_warmup, warmup); 
     UNPACK_INT(s_times, times);
-    int j, i, n=0;
-    int tmp;
+    int n;
     nanotime_t overhead = estimate_overhead(s_rho, warmup);
-    nanotime_t start, end, precision = 0;
+    nanotime_t start, end;
     SEXP s_ret;
 
     PROTECT(s_ret = allocVector(REALSXP, times));
