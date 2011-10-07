@@ -142,13 +142,13 @@ microbenchmark <- function(..., list=NULL, times=100L, control=list()) {
 ##' @S3method print microbenchmark
 ##' @method print microbenchmark
 ##' @author Olaf Mersmann \email{olafm@@datensplitter.net}
-print.microbenchmark <- function(x, unit="ns", ...) {
+print.microbenchmark <- function(x, unit="t", ...) {
   x$time <- convert_to_unit(x$time, unit)
   res <- aggregate(time ~ expr, x, fivenum)
   res <- cbind(res$expr, as.data.frame(res$time))
   colnames(res) <- c("expr", "min", "lq", "median", "uq", "max")
   cat("Unit: ", attr(x$time, "unit"), "\n", sep="")
-  print(res)
+  print(res, unit="t", ...)
 }
 
 ##' Boxplot of \code{microbenchmark} timings.
@@ -166,10 +166,10 @@ print.microbenchmark <- function(x, unit="ns", ...) {
 ##' @importFrom graphics boxplot
 ##' 
 ##' @author Olaf Mersmann \email{olafm@@datensplitter.net}
-boxplot.microbenchmark <- function(x, unit="ns", log=TRUE, xlab, ylab, ...) {
+boxplot.microbenchmark <- function(x, unit="t", log=TRUE, xlab, ylab, ...) {
   x$time <- convert_to_unit(x$time, unit)
-  timeunits <- c("ns", "us", "ms", "s")
-  frequnits <- c("hz", "khz", "mhz")
+  timeunits <- c("ns", "us", "ms", "s", "t")
+  frequnits <- c("hz", "khz", "mhz", "eps", "f")
   
   if (missing(xlab))
     xlab <- "Expression"
@@ -235,10 +235,12 @@ resolve the issue with you."
 ##' \item{\dQuote{us}}{Microseconds.}
 ##' \item{\dQuote{ms}}{Milliseconds.}
 ##' \item{\dQuote{s}}{Seconds.}
+##' \item{\dQuote{t}}{Appropriately prefixed time unit.}
 ##' \item{\dQuote{hz}}{Hertz / evaluations per second.}
 ##' \item{\dQuote{eps}}{Evaluations per second / Hertz.}
 ##' \item{\dQuote{khz}}{Kilohertz / 1000s of evaluations per second.}
 ##' \item{\dQuote{mhz}}{Megahertz / 1000000s of evaluations per second.}
+##' \item{\dQuote{f}}{Appropriately prefixed frequency unit.}
 ##' }
 ##' 
 ##' @param x An \code{microbenchmark} object.
@@ -249,36 +251,57 @@ resolve the issue with you."
 ##'   time.
 ##'
 ##' @author Olaf Mersmann \email{olafm@@datensplitter.net}
-convert_to_unit <- function(x, unit=c("ns", "us", "ms", "s", "hz", "khz", "mhz", "eps")) {
-  unit <- match.arg(unit)  
-  if (unit == "ns") {
-    attr(x, "unit") <- "nanoseconds"
-    unclass(x)
-  } else if (unit == "us") {
-    attr(x, "unit") <- "microseconds"
-    unclass(x / 1e3)
-  } else if (unit == "ms") {
-    attr(x, "unit") <- "milliseconds"
-    unclass(x / 1e6)    
-  } else if (unit == "s") {
-    attr(x, "unit") <- "seconds"
-    unclass(x / 1e9)
-  } else if (unit == "eps") {
-    attr(x, "unit") <- "evaluations per second"
-    unclass(1e9 / x)
-  } else if (unit == "hz") {
-    attr(x, "unit") <- "hertz"
-    unclass(1e9 / x)
-  } else if (unit == "khz") {
-    attr(x, "unit") <- "kilohertz"
-    unclass(1e6 / x)
-  } else if (unit == "mhz") {
-    attr(x, "unit") <- "megahertz"
-    unclass(1e3 / x)
-} else {
-    stop("Unknown unit '", unit, "'.")
-  }
+convert_to_unit <- function(x, unit=c("ns", "us", "ms", "s", "t", "hz", "khz", "mhz", "eps", "f")) {
+  unit <- match.arg (unit)
+
+  switch (unit,
+          t = unit <- sprintf ("%ss", find_prefix (x * 1e-9, minexp = -9, maxexp = 0, mu = FALSE)),
+          f = unit <- sprintf ("%shz", find_prefix (1e9 / x, minexp =  0, maxexp = 6, mu = FALSE))
+          )
+  
+  switch (unit,
+          ns  = {attr(x, "unit") <- "nanoseconds"           ; unclass(x      )},
+          us  = {attr(x, "unit") <- "microseconds"          ; unclass(x / 1e3)},
+          ms  = {attr(x, "unit") <- "milliseconds"          ; unclass(x / 1e6)}, 
+          s   = {attr(x, "unit") <- "seconds"               ; unclass(x / 1e9)},
+          eps = {attr(x, "unit") <- "evaluations per second"; unclass(1e9 / x)},
+          hz  = {attr(x, "unit") <- "hertz"                 ; unclass(1e9 / x)},
+          khz = {attr(x, "unit") <- "kilohertz"             ; unclass(1e6 / x)},
+          mhz = {attr(x, "unit") <- "megahertz"             ; unclass(1e3 / x)},
+          stop("Unknown unit '", unit, "'.")
+          )
 }
+
+##' Find SI prefix for unit
+##'
+##' 
+##' @param x a numeric
+##' @param f function that produces the number from \code{x} that is used to determine the
+##' prefix, e.g. \code{\link[base]{min}} or \code{\link[stats]{median}}.
+##' @param minexp minimum (decimal) exponent to consider, 
+##'   e.g. -3 to suppress prefixes smaller than milli (m).
+##' @param maxexp maximum (decimal) exponent to consider, 
+##'   e.g. 3 to suppress prefixes larger than kilo (k).
+##' @param mu if \code{TRUE}, should a proper mu is used for micro, otherwise use
+##'  u as ASCII-compatible replacement
+##'
+##' @return character with the SI prefix
+##' @author Claudia Beleites 
+find_prefix <- function (x, f = min, minexp = -Inf, maxexp = Inf, mu = TRUE){
+ 
+  prefixes <- c ("y", "z", "a", "f", "p", "n", "u", "m", "", "k", "M", "G", "T", "P", "E", "Z", "Y")
+  if (mu) prefixes [7] <- "\u03bc"
+
+  if (is.numeric (minexp)) minexp <- floor (minexp / 3) 
+  if (is.numeric (minexp)) maxexp <- floor (maxexp / 3) 
+  
+  e3 <- floor (log10 (f (x)) / 3)
+  e3 <- max (e3, minexp, -8) # prefixes go from 10^-24 = 10^(3 * -8)
+  e3 <- min (e3, maxexp,  8) # to 10^24 = 10^(3 * 8)
+
+  prefixes [e3 + 9] # e3 of -8 => index 1
+}
+
 
 ##' Return first non null argument.
 ##'
