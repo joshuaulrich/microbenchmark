@@ -52,11 +52,11 @@ nanotime_t estimate_overhead(SEXP s_rho, int rounds) {
 SEXP do_microtiming_precision(SEXP s_rho, SEXP s_times, SEXP s_warmup) {
     UNPACK_INT(s_warmup, warmup); 
     UNPACK_INT(s_times, times);
-    int n;
+    int n = 0;
     nanotime_t overhead = estimate_overhead(s_rho, warmup);
     nanotime_t start, end;
     SEXP s_ret;
-
+    
     PROTECT(s_ret = allocVector(REALSXP, times));
     while (n < times) {
         start = get_nanotime();
@@ -65,7 +65,7 @@ SEXP do_microtiming_precision(SEXP s_rho, SEXP s_times, SEXP s_warmup) {
             REAL(s_ret)[n] = end - start - overhead;
             n++;
         }
-    }    
+    }
     UNPROTECT(1); /* s_ret */
     return s_ret;
 }
