@@ -209,18 +209,19 @@ There are several causes for this. The most likely are
  * You have frequency scaling turned on. Most modern CPUs can reduce
    their core frequency if they are not busy. microbenchmark tries
    hard to spin up the CPU before the actual timing, but there is no
-   guarantee this work. You might want to disable this feature. Under
-   Linux this can be done using the 'cpufreq' utilities.
+   guarantee this works, so you are advised to disable this
+   feature. Under Linux this can be done using the 'cpufreq'
+   utilities.
 
  * You have a machine with many CPU cores and the timers provided by
    your operating system are not synchronized across cores. Your best
-   bet is it to peg your R process to a single core. On Linux systems,
+   bet is to peg your R process to a single core. On Linux systems,
    this can be achieved using the 'taskset' utility.
 
  * Your machine is super fast. If the difference between the estimated
    overhead and the actual execution time is zero (or possibly even
-   negative), you will get this error. Sorry, you're out of luck,
-   benchmark complexer code.
+   negative), you will get this error. Sorry,
+   you're out of luck, benchmark complexer code.
 
 If this problem persists for you, please contact me and I will try to
 resolve the issue with you."
