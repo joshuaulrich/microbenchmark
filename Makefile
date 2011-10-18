@@ -16,10 +16,12 @@ help: usage
 	echo " package  - build source package of last commit"
 	echo " pkg      - roxygenize skel/ into pkg/"
 
+unexport MAKEFLAGS
 install: clean pkg
 	echo "Installing package..."
-	${R} CMD INSTALL --no-multiarch pkg > install.log 2>&1
+	${R} CMD INSTALL pkg > install.log 2>&1
 
+unexport MAKEFLAGS
 check: clean pkg
 	echo "Running ${R} CMD check..."
 	${R} CMD check pkg && rm -fR pkg.Rcheck
