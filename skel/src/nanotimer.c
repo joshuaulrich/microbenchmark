@@ -35,16 +35,27 @@ SEXP do_nothing(SEXP a, SEXP b) {
 }
 
 nanotime_t estimate_overhead(SEXP s_rho, int rounds) {
-    int i;
+    int i, n_back_in_time = 0;
     /* Estimate minimal overhead and warm up the machine ... */
-    nanotime_t start, end, overhead = 1 << 31;
+    nanotime_t start, end, overhead = UINT64_MAX;
     for (i = 0; i < rounds; ++i) {
         start = get_nanotime();
         end = get_nanotime();
 
         const nanotime_t diff = end - start;
-        if (diff > 0 && diff < overhead)
+        if (start < end && diff < overhead) {
             overhead = diff;
+        } else if (start > end) {
+            n_back_in_time++;
+        }
+    }
+    if (UINT64_MAX == overhead) {
+        error("Overhead estimation failed. No overhead could be observed or "
+              "the observed overhead was maximally large.");
+    }
+    if (n_back_in_time > 0) {
+        warning("Observed negative overhead in %i cases.",
+                n_back_in_time);
     }
     return overhead;
 }
@@ -56,12 +67,11 @@ SEXP do_microtiming_precision(SEXP s_rho, SEXP s_times, SEXP s_warmup) {
     nanotime_t overhead = estimate_overhead(s_rho, warmup);
     nanotime_t start, end;
     SEXP s_ret;
-    
     PROTECT(s_ret = allocVector(REALSXP, times));
     while (n < times) {
         start = get_nanotime();
         end = get_nanotime();
-        if (end - start > 0) {
+        if (start < end) {
             REAL(s_ret)[n] = end - start - overhead;
             n++;
         }
@@ -101,14 +111,19 @@ SEXP do_microtiming(SEXP s_exprs, SEXP s_rho, SEXP s_warmup) {
         s_tmp = eval(s_expr, s_rho);
         end = get_nanotime();
         
-        const nanotime_t diff = end - start;
-        if (diff < overhead) {
-            ret[i] = R_NaReal;
-            n_under_overhead++;
+        if (start < end) {
+            const nanotime_t diff = end - start;
+            if (diff < overhead) {
+                ret[i] = R_NaReal;
+                n_under_overhead++;
+            } else {
+                ret[i] = diff - overhead;
+            }
         } else {
-            ret[i] = diff - overhead;
+            error("Measured negative execution time! Please investigate and/or "
+                  "contact the package author.");
         }
-
+        
         /* Housekeeping */
         R_CheckUserInterrupt();
         /* R_gc(); */
@@ -125,7 +140,7 @@ SEXP do_microtiming(SEXP s_exprs, SEXP s_rho, SEXP s_warmup) {
                     n_under_overhead);
         }
     }
-    
+
     UNPROTECT(1); /* s_ret */
     return s_ret;
 }
