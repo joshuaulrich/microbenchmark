@@ -29,7 +29,7 @@
 ##' \item{warmup}{the number of warm-up iterations performed before
 ##'   the actual benchmark. These are used to estimate the timing
 ##'   overhead as well as spinning up the processor from any sleep
-##'   or idle states it might be in. The default value is 2^}
+##'   or idle states it might be in. The default value is 2.}
 ##' }
 ##' 
 ##' @note Depending on the underlying operating system, different
@@ -53,7 +53,7 @@
 ##' @param control List of control arguments. See Details.
 ##'
 ##' @return Object of class \sQuote{microbenchmark}, a matrix with one
-##'   column per exoression. Each row contains the time it took to
+##'   column per expression. Each row contains the time it took to
 ##'   evaluate the respective expression one time in nanoseconds.
 ##'
 ##' @seealso \code{\link{print.microbenchmark}} to display and
