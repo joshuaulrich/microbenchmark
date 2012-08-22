@@ -274,11 +274,11 @@ convert_to_unit <- function(x, unit=c("ns", "us", "ms", "s", "t", "hz", "khz", "
 }
 
 ##' Find SI prefix for unit
-##'
 ##' 
 ##' @param x a numeric
-##' @param f function that produces the number from \code{x} that is used to determine the
-##' prefix, e.g. \code{\link[base]{min}} or \code{\link[stats]{median}}.
+##' @param f function that produces the number from \code{x} that is used to
+##'   determine the prefix, e.g. \code{\link[base]{min}} or
+##'   \code{\link[stats]{median}}.
 ##' @param minexp minimum (decimal) exponent to consider, 
 ##'   e.g. -3 to suppress prefixes smaller than milli (m).
 ##' @param maxexp maximum (decimal) exponent to consider, 
@@ -290,7 +290,8 @@ convert_to_unit <- function(x, unit=c("ns", "us", "ms", "s", "t", "hz", "khz", "
 ##' @author Claudia Beleites 
 find_prefix <- function (x, f = min, minexp = -Inf, maxexp = Inf, mu = TRUE){
  
-  prefixes <- c ("y", "z", "a", "f", "p", "n", "u", "m", "", "k", "M", "G", "T", "P", "E", "Z", "Y")
+  prefixes <- c ("y", "z", "a", "f", "p", "n", "u", "m", "",
+                 "k", "M", "G", "T", "P", "E", "Z", "Y")
   if (mu) prefixes [7] <- "\u03bc"
 
   if (is.numeric (minexp)) minexp <- floor (minexp / 3) 
