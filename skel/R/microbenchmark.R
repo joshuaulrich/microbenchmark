@@ -252,23 +252,27 @@ resolve the issue with you."
 ##'   time.
 ##'
 ##' @author Olaf Mersmann \email{olafm@@datensplitter.net}
-convert_to_unit <- function(x, unit=c("ns", "us", "ms", "s", "t", "hz", "khz", "mhz", "eps", "f")) {
-  unit <- match.arg (unit)
+convert_to_unit <- function(x,
+                            unit=c("ns", "us", "ms", "s", "t",
+                              "hz", "khz", "mhz", "eps", "f")) {
+  unit <- match.arg(unit)
 
   switch (unit,
-          t = unit <- sprintf ("%ss", find_prefix (x * 1e-9, minexp = -9, maxexp = 0, mu = FALSE)),
-          f = unit <- sprintf ("%shz", find_prefix (1e9 / x, minexp =  0, maxexp = 6, mu = FALSE))
+          t=unit <- sprintf ("%ss", find_prefix(x * 1e-9,
+            minexp = -9, maxexp = 0, mu = FALSE)),
+          f=unit <- sprintf ("%shz", find_prefix(1e9 / x,
+            minexp =  0, maxexp = 6, mu = FALSE))
           )
   
   switch (unit,
-          ns  = {attr(x, "unit") <- "nanoseconds"           ; unclass(x      )},
-          us  = {attr(x, "unit") <- "microseconds"          ; unclass(x / 1e3)},
-          ms  = {attr(x, "unit") <- "milliseconds"          ; unclass(x / 1e6)}, 
-          s   = {attr(x, "unit") <- "seconds"               ; unclass(x / 1e9)},
-          eps = {attr(x, "unit") <- "evaluations per second"; unclass(1e9 / x)},
-          hz  = {attr(x, "unit") <- "hertz"                 ; unclass(1e9 / x)},
-          khz = {attr(x, "unit") <- "kilohertz"             ; unclass(1e6 / x)},
-          mhz = {attr(x, "unit") <- "megahertz"             ; unclass(1e3 / x)},
+          ns  ={attr(x, "unit") <- "nanoseconds"           ; unclass(x      )},
+          us  ={attr(x, "unit") <- "microseconds"          ; unclass(x / 1e3)},
+          ms  ={attr(x, "unit") <- "milliseconds"          ; unclass(x / 1e6)}, 
+          s   ={attr(x, "unit") <- "seconds"               ; unclass(x / 1e9)},
+          eps ={attr(x, "unit") <- "evaluations per second"; unclass(1e9 / x)},
+          hz  ={attr(x, "unit") <- "hertz"                 ; unclass(1e9 / x)},
+          khz ={attr(x, "unit") <- "kilohertz"             ; unclass(1e6 / x)},
+          mhz ={attr(x, "unit") <- "megahertz"             ; unclass(1e3 / x)},
           stop("Unknown unit '", unit, "'.")
           )
 }
