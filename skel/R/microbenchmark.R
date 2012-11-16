@@ -51,7 +51,8 @@
 ##' @param list List of unevaluated expression to benchmark.
 ##' @param times Number of times to evaluate the expression.
 ##' @param control List of control arguments. See Details.
-##'
+##' @param unit Default unit used in \code{summary} and \code{print}.
+##' 
 ##' @return Object of class \sQuote{microbenchmark}, a matrix with one
 ##'   column per expression. Each row contains the time it took to
 ##'   evaluate the respective expression one time in nanoseconds.
@@ -80,9 +81,12 @@
 ##' 
 ##' @export
 ##' @author Olaf Mersmann \email{olafm@@p-value.ner}
-microbenchmark <- function(..., list=NULL, times=100L, control=list()) {
+microbenchmark <- function(..., list=NULL,
+                           times=100L,
+                           unit,
+                           control=list()) {
   stopifnot(times == as.integer(times))
-
+  
   control[["warmup"]] <- coalesce(control[["warmup"]], 2^18L)
   control[["order"]] <- coalesce(control[["order"]], "random")
 
@@ -119,5 +123,7 @@ microbenchmark <- function(..., list=NULL, times=100L, control=list()) {
 
   res <- data.frame(expr = factor(nm[o], levels = nm), time=res)
   class(res) <- c("microbenchmark", class(res))
+  if (!missing(unit))
+    attr(res, "unit") <- unit
   res
 }

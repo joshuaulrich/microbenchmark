@@ -6,7 +6,12 @@
 ##' compared to the best median time (\code{"relative"}).
 ##'
 ##' @param object An object of class \code{microbenchmark}.
-##' @param unit What unit to print the timings in.
+##' 
+##' @param unit What unit to print the timings in. If none is given,
+##' either the \code{unit} attribute of \code{object} or the option
+##' \code{microbenchmark.unit} is used and if neither is set
+##' \dQuote{t} is used.
+##' 
 ##' @param ... Passed to \code{print.data.frame}
 ##'
 ##' @return A \code{data.frame} containing the aggregated results.
@@ -14,7 +19,15 @@
 ##' @seealso \code{\link{print.microbenchmark}}
 ##' @S3method summary microbenchmark
 ##' @method summary microbenchmark
-summary.microbenchmark <- function(object, unit = "t", ...) {
+summary.microbenchmark <- function(object, unit, ...) {
+  ## Choose unit if not given based on unit attribute of object or
+  ## global option. Default to 't' if none is set.
+  if (missing(unit)) {
+    unit <- if (!is.null(attr(object, "unit")))
+      attr(object, "unit")
+    else
+      getOption("microbenchmark.unit", "t")
+  }
   if (unit != "relative")
     object$time <- convert_to_unit(object$time, unit)
 

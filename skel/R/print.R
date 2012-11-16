@@ -15,7 +15,7 @@
 ##' @S3method print microbenchmark
 ##' @method print microbenchmark
 ##' @author Olaf Mersmann \email{olafm@@p-value.net}
-print.microbenchmark <- function(x, unit="t", order=NULL, ...) {
+print.microbenchmark <- function(x, unit, order=NULL, ...) {
   s <- summary(x, unit=unit)
   cat("Unit: ", attr(s, "unit"), "\n", sep="")
   if (!missing(order)) {

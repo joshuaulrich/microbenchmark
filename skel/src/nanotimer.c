@@ -14,8 +14,8 @@ typedef uint64_t nanotime_t;
   #include "nanotimer_windows.h"
 #elif defined(__MACH__) || defined(__APPLE__)
   #include "nanotimer_macosx.h"
-#elif defined(linux) || defined(__linux)
-  #include "nanotimer_linux.h"
+#elif defined(linux) || defined(__linux) || defined(__FreeBSD__)
+  #include "nanotimer_gettime.h"
 #elif defined(sun) || defined(__sun) || defined(_AIX)
   #include "nanotimer_rtposix.h"
 #else /* Unsupported OS */
