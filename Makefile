@@ -41,9 +41,11 @@ package: clean pkg
 	-git stash pop -q
 	rm -f pkg/ChangeLog
 
+test: install
+	$(RSCRIPT) ./tools/run-tests
+
 pkg:
 	echo "Roxygenizing package..."
 	./tools/roxygenize > roxygen.log 2>&1
-	rm -fR pkg/inst ## Stupid roxygen!
 	echo "Updating 'Version' field..."
 	./tools/set-version

@@ -1,0 +1,8 @@
+#!/usr/bin/env Rscript
+## -*- mode:r -*-
+
+library("methods")
+library("testthat")
+library("microbenchmark")
+
+test_dir(file.path(system.file(package="microbenchmark"), "tests"))

@@ -10,7 +10,7 @@ nanotime_t get_nanotime(void) {
      * which, if I understand it correctly, would require the R
      * process to be bound to one core.
      */
-    clock_gettime(CLOCK_REALTIME, &time_var);
+    clock_gettime(CLOCK_MONOTONIC, &time_var);
 
     nanotime_t sec = time_var.tv_sec;
     nanotime_t nsec = time_var.tv_nsec;
