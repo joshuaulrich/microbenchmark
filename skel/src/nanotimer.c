@@ -80,6 +80,10 @@ SEXP do_microtiming_precision(SEXP s_rho, SEXP s_times, SEXP s_warmup) {
     return s_ret;
 }
 
+SEXP do_get_nanotime() {
+    return ScalarReal(get_nanotime() * 1.0);
+}
+
 SEXP do_microtiming(SEXP s_exprs, SEXP s_rho, SEXP s_warmup) {
     nanotime_t start, end, overhead;
     int i, n_under_overhead = 0;
