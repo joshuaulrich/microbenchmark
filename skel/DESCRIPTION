@@ -2,9 +2,11 @@ Package: microbenchmark
 Title: Sub microsecond accurate timing functions.
 Description: Provides infrastructure to accurately measure and compare
   the execution time of R expressions.
-Author: Olaf Mersmann <olafm@p-value.net>
+Author: Olaf Mersmann <olafm@p-value.net> with patches from \
+  Claudia Beleites and
+  Rainer Hurling
 Maintainer: Olaf Mersmann <olafm@p-value.net>
-License: BSD
+License: BSD_2_clause + file LICENSE
 Suggests: ggplot2
 Imports: graphics
 LazyData: yes
