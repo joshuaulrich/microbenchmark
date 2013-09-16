@@ -80,7 +80,7 @@
 ##' }
 ##' 
 ##' @export
-##' @author Olaf Mersmann \email{olafm@@p-value.ner}
+##' @author Olaf Mersmann \email{olafm@@p-value.net}
 microbenchmark <- function(..., list=NULL,
                            times=100L,
                            unit,
