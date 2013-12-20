@@ -7,7 +7,7 @@ Author: Olaf Mersmann <olafm@p-value.net> with patches from \
   Rainer Hurling
 Maintainer: Olaf Mersmann <olafm@p-value.net>
 License: BSD_2_clause + file LICENSE
-Suggests: ggplot2
+Suggests: ggplot2, multcomp
 Imports: graphics
 LazyData: yes
 Version: 0.0-0

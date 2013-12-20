@@ -1,10 +1,5 @@
 ##' Summarize \code{microbenchmark} timings.
 ##' 
-##' The available units are nanoseconds (\code{"ns"}), microseconds
-##' (\code{"us"}), milliseconds (\code{"ms"}), seconds (\code{"s"})
-##' and evaluations per seconds (\code{"eps"}) and relative runtime
-##' compared to the best median time (\code{"relative"}).
-##'
 ##' @param object An object of class \code{microbenchmark}.
 ##' 
 ##' @param unit What unit to print the timings in. If none is given,
@@ -14,8 +9,14 @@
 ##' 
 ##' @param ... Passed to \code{print.data.frame}
 ##'
+##' @note The available units are nanoseconds (\code{"ns"}),
+##' microseconds (\code{"us"}), milliseconds (\code{"ms"}), seconds
+##' (\code{"s"}) and evaluations per seconds (\code{"eps"}) and
+##' relative runtime compared to the best median time
+##' (\code{"relative"}).
+##'
 ##' @return A \code{data.frame} containing the aggregated results.
-##' 
+##'
 ##' @seealso \code{\link{print.microbenchmark}}
 ##' @S3method summary microbenchmark
 ##' @method summary microbenchmark
@@ -42,6 +43,11 @@ summary.microbenchmark <- function(object, unit, ...) {
     attr(res, "unit") <- "relative"
   } else {    
     attr(res, "unit") <- attr(object$time, "unit")
+  }
+
+  if (require("multcomp")) {
+    comp <- glht(lm(time ~ expr, object), mcp(expr = "Tukey"))
+    res$cld <- cld(comp)$mcletters$monospacedLetters
   }
   res
 }
