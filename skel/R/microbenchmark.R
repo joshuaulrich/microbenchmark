@@ -48,17 +48,23 @@
 ##' \code{NA}.
 ##' 
 ##' @param ... Expressions to benchmark.
-##' @param list List of unevaluated expression to benchmark.
+##' @param list  List of unevaluated expression to benchmark.
 ##' @param times Number of times to evaluate the expression.
+##' @param check Function to check if the expressions are equal. By default \code{NULL} which omits the check.
 ##' @param control List of control arguments. See Details.
 ##' @param unit Default unit used in \code{summary} and \code{print}.
 ##' 
-##' @return Object of class \sQuote{microbenchmark}, a matrix with one
-##'   column per expression. Each row contains the time it took to
-##'   evaluate the respective expression one time in nanoseconds.
+##' @return Object of class \sQuote{microbenchmark}, a data frame with
+##' columns \code{expr} and \code{time}. \code{expr} contains the
+##' deparsed expression as passed to \code{microbenchmark} or the name
+##' of the argument if the expression was passed as a named
+##' argument. \code{time} is the measured execution time of the
+##' expression in nanoseconds. The order of the observations in the
+##' data frame is identical to the execution order.
 ##'
 ##' @seealso \code{\link{print.microbenchmark}} to display and
-##' \code{\link{boxplot.microbenchmark}} to plot the results.
+##' \code{\link{boxplot.microbenchmark}} or
+##' \code{\link{autoplot.microbenchmark}} to plot the results.
 ##' 
 ##' @examples
 ##' ## Measure the time it takes to dispatch a simple function call
@@ -74,9 +80,7 @@
 ##'
 ##' ## Pretty plot:
 ##' if (require("ggplot2")) {
-##'   plt <- ggplot2::qplot(y=time, data=res, colour=expr)
-##'   plt <- plt + ggplot2::scale_y_log10()
-##'   print(plt)
+##'   autoplot(res)
 ##' }
 ##' 
 ##' @export
@@ -84,6 +88,7 @@
 microbenchmark <- function(..., list=NULL,
                            times=100L,
                            unit,
+                           check=NULL,
                            control=list()) {
   stopifnot(times == as.integer(times))
   if (!missing(unit))
@@ -102,6 +107,16 @@ microbenchmark <- function(..., list=NULL,
   else
     nm[nm == ""] <- exprnm[nm == ""]
   names(exprs) <- nm
+
+  if (!is.null(check)) {
+    ## Evaluate values in parent environment
+    values <- lapply(exprs, eval, parent.frame())
+    ok <- check(values)
+    
+    if (!isTRUE(ok)) {
+      stop("Input expressions are not equivalent.", call. = FALSE)
+    }
+  }
 
   ## GC first
   gc(FALSE)
