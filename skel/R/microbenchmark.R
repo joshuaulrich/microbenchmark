@@ -82,7 +82,23 @@
 ##' if (require("ggplot2")) {
 ##'   autoplot(res)
 ##' }
+##'
+##' ## Example check usage
+##' my_check <- function(values) {
+##'   all(sapply(values[-1], function(x) identical(values[[1]], x)))
+##' }
 ##' 
+##' f <- function(a, b)
+##'   2 + 2
+##'
+##' a <- 2
+##' ## Check passes
+##' microbenchmark(2 + 2, 2 + a, f(2, a), f(2, 2), check=my_check)
+##' \dontrun{
+##' a <- 3
+##' ## Check fails
+##' microbenchmark(2 + 2, 2 + a, f(2, a), f(2, 2), check=my_check)
+##' }
 ##' @export
 ##' @author Olaf Mersmann \email{olafm@@p-value.net}
 microbenchmark <- function(..., list=NULL,
