@@ -4,6 +4,7 @@
 ##' @param unit What unit to print the timings in. Default value taken
 ##'   from to option \code{microbenchmark.unit} (see example).
 ##' @param order If present, order results according to this column of the output.
+##' @param signif If present, limit the number of significant digits shown.
 ##' @param ... Passed to \code{print.data.frame}
 ##'
 ##' @note The available units are nanoseconds (\code{"ns"}), microseconds
@@ -37,8 +38,12 @@
 ##' @S3method print microbenchmark
 ##' @method print microbenchmark
 ##' @author Olaf Mersmann \email{olafm@@p-value.net}
-print.microbenchmark <- function(x, unit, order=NULL, ...) {
+print.microbenchmark <- function(x, unit, order, signif, ...) {
   s <- summary(x, unit=unit)
+  timing_cols <- c("min", "lq", "median", "uq", "max")
+  if (!missing(signif)) {
+    s[timing_cols] <- lapply(s[timing_cols], base::signif, signif)
+  }
   cat("Unit: ", attr(s, "unit"), "\n", sep="")
   if (!missing(order)) {
     if (order %in% colnames(s)) {
