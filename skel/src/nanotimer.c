@@ -36,6 +36,7 @@ SEXP do_nothing(SEXP a, SEXP b) {
 
 nanotime_t estimate_overhead(SEXP s_rho, int rounds) {
     int i, n_back_in_time = 0;
+    int observed_overhead = FALSE;
     /* Estimate minimal overhead and warm up the machine ... */
     nanotime_t start, end, overhead = UINT64_MAX;
     for (i = 0; i < rounds; ++i) {
@@ -44,14 +45,17 @@ nanotime_t estimate_overhead(SEXP s_rho, int rounds) {
 
         const nanotime_t diff = end - start;
         if (start < end && diff < overhead) {
+            observed_overhead = TRUE;
             overhead = diff;
         } else if (start > end) {
             n_back_in_time++;
         }
     }
-    if (UINT64_MAX == overhead) {
-        error("Overhead estimation failed. No overhead could be observed or "
-              "the observed overhead was maximally large.");
+    if (!observed_overhead) {
+        warning("Could not measure overhead. Your clock might lack precision.");
+        overhead = 0;
+    } else if (UINT64_MAX == overhead) {
+        error("Observed overhead too large.");
     }
     if (n_back_in_time > 0) {
         warning("Observed negative overhead in %i cases.",
@@ -124,7 +128,7 @@ SEXP do_microtiming(SEXP s_exprs, SEXP s_rho, SEXP s_warmup) {
                 ret[i] = diff - overhead;
             }
         } else if (start == end) {
-            warning("Could not measure overhead. Your clock probably lacks precision.");
+            warning("Could not measure overhead. Your clock might lack precision.");
         } else {
             error("Measured negative execution time! Please investigate and/or "
                   "contact the package author.");
