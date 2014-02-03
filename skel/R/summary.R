@@ -45,7 +45,7 @@ summary.microbenchmark <- function(object, unit, ...) {
     attr(res, "unit") <- attr(object$time, "unit")
   }
 
-  if (require("multcomp")) {
+  if (require("multcomp", quietly=TRUE)) {
     comp <- glht(lm(time ~ expr, object), mcp(expr = "Tukey"))
     res$cld <- cld(comp)$mcletters$monospacedLetters
   }
