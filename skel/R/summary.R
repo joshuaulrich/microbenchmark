@@ -32,9 +32,10 @@ summary.microbenchmark <- function(object, unit, ...) {
   if (unit != "relative")
     object$time <- convert_to_unit(object$time, unit)
 
-  res <- aggregate(time ~ expr, object, function(z) c(fivenum(z), length(z)))
+  res <- aggregate(time ~ expr, object,
+                   function(z) c(fivenum(z), mean(z), length(z))[c(1, 2, 6, 3, 4, 5, 7)])
   res <- cbind(res$expr, as.data.frame(res$time))
-  colnames(res) <- c("expr", "min", "lq", "median", "uq", "max", "neval")
+  colnames(res) <- c("expr", "min", "lq", "mean", "median", "uq", "max", "neval")
 
   if (unit == "relative") {
     min <- res[which.min(res$median), , drop = FALSE]
