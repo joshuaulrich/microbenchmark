@@ -45,6 +45,7 @@ test: install
 	$(RSCRIPT) ./tools/run-tests
 
 pkg:
+	cp -R skel pkg
 	echo "Roxygenizing package..."
 	./tools/roxygenize > roxygen.log 2>&1
 	echo "Updating 'Version' field..."
