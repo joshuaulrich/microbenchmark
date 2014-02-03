@@ -11,21 +11,21 @@
 typedef uint64_t nanotime_t;
 
 #if defined(WIN32) 
-  #include "nanotimer_windows.h"
+#include "nanotimer_windows.h"
 #elif defined(__MACH__) || defined(__APPLE__)
-  #include "nanotimer_macosx.h"
+#include "nanotimer_macosx.h"
 #elif defined(linux) || defined(__linux) || defined(__FreeBSD__) || defined(__OpenBSD__)
-  #include "nanotimer_gettime.h"
+#include "nanotimer_gettime.h"
 #elif defined(sun) || defined(__sun) || defined(_AIX)
-  #include "nanotimer_rtposix.h"
+#include "nanotimer_rtposix.h"
 #else /* Unsupported OS */
-  #error "Unsupported OS."
+#error "Unsupported OS."
 #endif
 
 #if defined(__GNUC__)
-  #define NOINLINE  __attribute__((noinline))
+#define NOINLINE  __attribute__((noinline))
 #else
-  #define NOINLINE
+#define NOINLINE
 #endif
 
 SEXP do_nothing(SEXP a, SEXP b) NOINLINE;
@@ -123,6 +123,8 @@ SEXP do_microtiming(SEXP s_exprs, SEXP s_rho, SEXP s_warmup) {
             } else {
                 ret[i] = diff - overhead;
             }
+        } else if (start == end) {
+            warning("Could not measure overhead. Your clock probably lacks precision.");
         } else {
             error("Measured negative execution time! Please investigate and/or "
                   "contact the package author.");
