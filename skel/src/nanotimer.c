@@ -122,13 +122,14 @@ SEXP do_microtiming(SEXP s_exprs, SEXP s_rho, SEXP s_warmup) {
         if (start < end) {
             const nanotime_t diff = end - start;
             if (diff < overhead) {
-                ret[i] = R_NaReal;
+                ret[i] = 0.0;
                 n_under_overhead++;
             } else {
                 ret[i] = diff - overhead;
             }
         } else if (start == end) {
-            warning("Could not measure overhead. Your clock might lack precision.");
+            warning("Could not measure execution time. Your clock might lack precision.");
+            ret[i] = 0.0;
         } else {
             error("Measured negative execution time! Please investigate and/or "
                   "contact the package author.");
