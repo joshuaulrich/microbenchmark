@@ -91,6 +91,7 @@ SEXP do_get_nanotime() {
 SEXP do_microtiming(SEXP s_exprs, SEXP s_rho, SEXP s_warmup) {
     nanotime_t start, end, overhead;
     int i, n_under_overhead = 0;
+    int warn_start_end_equal = 0;
     R_len_t n_exprs = 0;
     volatile SEXP s_tmp;    
     SEXP s_ret, s_expr;
@@ -128,7 +129,10 @@ SEXP do_microtiming(SEXP s_exprs, SEXP s_rho, SEXP s_warmup) {
                 ret[i] = diff - overhead;
             }
         } else if (start == end) {
-            warning("Could not measure execution time. Your clock might lack precision.");
+            if (!warn_start_end_equal) {
+                warning("Could not measure execution time. Your clock might lack precision.");
+                warn_start_end_equal = 1;
+            }
             ret[i] = 0.0;
         } else {
             error("Measured negative execution time! Please investigate and/or "
