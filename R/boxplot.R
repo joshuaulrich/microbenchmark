@@ -7,7 +7,7 @@
 ##' @param ylab Y axes label.
 ##' @param ... Passed on to boxplot.formula.
 ##' 
-##' @S3method boxplot microbenchmark
+##' @export
 ##' @method boxplot microbenchmark
 ##'
 ##' @importFrom graphics boxplot

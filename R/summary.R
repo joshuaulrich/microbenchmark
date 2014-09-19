@@ -18,7 +18,7 @@
 ##' @return A \code{data.frame} containing the aggregated results.
 ##'
 ##' @seealso \code{\link{print.microbenchmark}}
-##' @S3method summary microbenchmark
+##' @export
 ##' @method summary microbenchmark
 summary.microbenchmark <- function(object, unit, ...) {
   ## Choose unit if not given based on unit attribute of object or

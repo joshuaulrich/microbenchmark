@@ -35,7 +35,7 @@
 ##' options(microbenchmark.unit="eps")
 ##' print(res)
 ##'
-##' @S3method print microbenchmark
+##' @export
 ##' @method print microbenchmark
 ##' @author Olaf Mersmann \email{olafm@@p-value.net}
 print.microbenchmark <- function(x, unit, order, signif, ...) {
