@@ -130,7 +130,8 @@ SEXP do_microtiming(SEXP s_exprs, SEXP s_rho, SEXP s_warmup) {
             }
         } else if (start == end) {
             if (!warn_start_end_equal) {
-                warning("Could not measure execution time. Your clock might lack precision.");
+                warning("Could not measure execution time. Your clock might "
+                        "lack precision.");
                 warn_start_end_equal = 1;
             }
             ret[i] = 0.0;
@@ -149,10 +150,11 @@ SEXP do_microtiming(SEXP s_exprs, SEXP s_rho, SEXP s_warmup) {
      */
     if (n_under_overhead > 0) {
         if (n_under_overhead == 1) {
-            warning("Estimated overhead was greater than measured evaluation time in 1 run.");
+            warning("Estimated overhead was greater than measured evaluation "
+                    "time in 1 run.");
         } else {
-            warning("Estimated overhead was greater than measured evaluation time in %i runs.", 
-                    n_under_overhead);
+            warning("Estimated overhead was greater than measured evaluation "
+                    "time in %i runs.", n_under_overhead);
         }
     }
 
