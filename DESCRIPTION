@@ -1,15 +1,13 @@
 Package: microbenchmark
 Title: Accurate timing functions.
 Description: Provides infrastructure to accurately measure and compare
-  the execution time of R expressions.
-Authors@R: c(
-    person("Olaf", "Mersmann", role=c("aut", "cre"), email="olafm@p-value.net"),
-    person("Claudia", "Beleites", role=c("ctb")),
-    person("Rainer", "Hurling", role=c("ctb"))
-  )
+        the execution time of R expressions.
+Authors@R: c( person("Olaf", "Mersmann", role=c("aut", "cre"),
+        email="olafm@p-value.net"), person("Claudia", "Beleites",
+        role=c("ctb")), person("Rainer", "Hurling", role=c("ctb")) )
 License: BSD_2_clause + file LICENSE
 Suggests: ggplot2, multcomp
 ByteCompile: yes
 Imports: graphics
 LazyData: yes
-Version: 1.3-1
+Version: 1.3-0.29

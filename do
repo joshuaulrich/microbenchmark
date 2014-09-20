@@ -1,4 +1,6 @@
 #!/usr/bin/env Rscript
+# vim: syntax=r
+
 library("methods")
 library("devtools", warn.conflicts=FALSE)
 library("roxygen2", warn.conflicts=FALSE)
@@ -10,9 +12,37 @@ package_name <- function() {
   read.dcf("./DESCRIPTION", "Package")[1]
 }
 
+get_version_from_git <- function() {
+  tag <- system2("git", c("describe", "--tags", "--match", "v*"),
+                 stdout=TRUE, stderr=TRUE)
+  is_clean <- system2("git", c("diff-index", "--quiet", tag)) == 0
+  suffix <- if (!is_clean) {
+    paste0(".", as.integer(Sys.time()))
+  } else {
+    ""
+  }
+  version <- sub("v", "", tag, fixed=TRUE)
+  ## Reformat version number by chopping of the hash at the end and
+  ## appending an appropriate suffix if the tree is dirty.
+  version_parts <- strsplit(version, "-")[[1]]
+  version <- if (length(version_parts) == 2) {
+    paste(version_parts, collapse="-")
+  } else if (length(version_parts) == 4) {
+    revision <- if (is_clean) {
+      version_parts[3]
+    } else {
+      revision <- as.integer(version_parts[3]) + 1
+    }
+    paste(paste(version_parts[1:2], collapse="-"), revision, sep=".")
+  }   
+  version
+}
+
 do_build <- function(args) {
   do_update("all")
   message("INFO: Building package.")
+  if (!file.exists("dist")) 
+    dir.create("dist")
   fn <- build(".", path="dist", quiet=TRUE)
   messagef("INFO: Package source tarball '%s' created.", fn)
 }
@@ -20,7 +50,8 @@ do_build <- function(args) {
 do_check <- function(args) {
   do_update("all")
   check_dir <- format(Sys.time(), "check-%Y%m%d_%H%M%S")
-  check_log <- file.path(check_dir, paste0(package_name(), ".Rcheck"), "00check.log")
+  check_log <- file.path(check_dir, paste0(package_name(), ".Rcheck"),
+                         "00check.log")
   dir.create(check_dir)
   message("INFO: Checking package.")
   ok <- tryCatch(check(".", document=FALSE, quiet=TRUE, cleanup=FALSE,
@@ -40,7 +71,8 @@ do_check <- function(args) {
       message(paste("  ", lines[relevant_lines], collapse="\n"))
       ## Because of Issue #507 we may get warnings # related to checking an UTF-8
       ## package in an ASCII locale.
-      if (any(grepl(".*with.*encoding.*in.*an.*locale.*", lines[relevant_lines]))) {
+      if (any(grepl(".*with.*encoding.*in.*an.*locale.*",
+                    lines[relevant_lines]))) {
         message("INFO: Please ignore the encoding related WARNINGs. They are caused by devtools issue #507.")
       }
    }
@@ -114,6 +146,11 @@ do_update <- function(args=NULL) {
   }
   if (length(roclets) > 0)
     o <- capture.output(roxygenize(".", roclets=roclets, clean=TRUE))
+  version <- get_version_from_git()
+  message("INFO: Setting version to ", version)
+  desc <- read.dcf("DESCRIPTION")
+  desc[,"Version"] <- version
+  write.dcf(desc, file="DESCRIPTION")
 }
 
 do <- function(args) {
