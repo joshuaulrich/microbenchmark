@@ -11,4 +11,4 @@ Imports: graphics, ggplot2
 Suggests: multcomp
 ByteCompile: yes
 LazyData: yes
-Version: 1.3-0.32
+Version: 1.3-0.33

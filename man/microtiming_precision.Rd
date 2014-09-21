@@ -8,7 +8,7 @@ microtiming_precision(rounds = 100L, warmup = 2^18)
 \arguments{
 \item{rounds}{Number of measurements used to estimate the precision.}
 
-\item{warmup}{Number of iterations used to warmup the CPU.}
+\item{warmup}{Number of iterations used to warm up the CPU.}
 }
 \value{
 A vector of observed non-zero timings.

@@ -8,7 +8,7 @@
 ##' of the timing subsystem.
 ##' 
 ##' @param rounds Number of measurements used to estimate the precision.
-##' @param warmup Number of iterations used to warmup the CPU.
+##' @param warmup Number of iterations used to warm up the CPU.
 ##' @return A vector of observed non-zero timings.
 ##'
 ##' @author Olaf Mersmann \email{olafm@@statistik.tu-dortmund.de}
