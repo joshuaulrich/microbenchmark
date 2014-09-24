@@ -26,7 +26,7 @@ deparsed expression as passed to \code{microbenchmark} or the name
 of the argument if the expression was passed as a named
 argument. \code{time} is the measured execution time of the
 expression in nanoseconds. The order of the observations in the
-data frame is identical to the execution order.
+data frame is the order in which they were executed.
 }
 \description{
 \code{microbenchmark} serves as a more accurate replacement of the
