@@ -9,7 +9,7 @@
 #' takes to evaluate \code{expr}. To achieved this, the
 #' sub-millisecond (supposedly nanosecond) accurate timing functions
 #' most modern operating systems provide are used. Additionally all
-#' evaluations of the expressions are done in C code to minimze any
+#' evaluations of the expressions are done in C code to minimize any
 #' overhead.
 #'
 #' This function is only meant for micro-benchmarking small pieces of
