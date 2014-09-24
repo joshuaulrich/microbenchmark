@@ -1,12 +1,12 @@
 #' Summarize \code{microbenchmark} timings.
-#' 
+#'
 #' @param object An object of class \code{microbenchmark}.
-#' 
+#'
 #' @param unit What unit to print the timings in. If none is given,
 #' either the \code{unit} attribute of \code{object} or the option
 #' \code{microbenchmark.unit} is used and if neither is set
 #' \dQuote{t} is used.
-#' 
+#'
 #' @param ... Passed to \code{print.data.frame}
 #'
 #' @note The available units are nanoseconds (\code{"ns"}),
@@ -45,13 +45,13 @@ summary.microbenchmark <- function(object, unit, ...) {
     min$neval <- 1 # Ugly hack: Do not rescale neval
     res[-1] <- res[-1] / as.list(min[-1])
     attr(res, "unit") <- "relative"
-  } else {    
+  } else {
     attr(res, "unit") <- attr(object$time, "unit")
   }
 
-  if (require("multcomp", quietly=TRUE) && 
+  if (requireMulticomp("multcomp", quietly=TRUE) &&
       nrow(res) > 1 && all(res["neval"] > 1)) {
-    comp <- multcomp::glht(lm(time ~ expr, object), mcp(expr = "Tukey"))
+    comp <- multcomp::glht(lm(time ~ expr, object), multcomp::mcp(expr = "Tukey"))
     res$cld <- multcomp::cld(comp)$mcletters$monospacedLetters
   }
   res
