@@ -49,7 +49,7 @@ summary.microbenchmark <- function(object, unit, ...) {
     attr(res, "unit") <- attr(object$time, "unit")
   }
 
-  if (requireMulticomp("multcomp", quietly=TRUE) &&
+  if (requireNamespace("multcomp", quietly=TRUE) &&
       nrow(res) > 1 && all(res["neval"] > 1)) {
     comp <- multcomp::glht(lm(time ~ expr, object), multcomp::mcp(expr = "Tukey"))
     res$cld <- multcomp::cld(comp)$mcletters$monospacedLetters
