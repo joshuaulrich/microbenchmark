@@ -10,7 +10,7 @@
 /* FIXME: Find portable 64 bit integer type. */
 typedef uint64_t nanotime_t;
 
-#if defined(WIN32) 
+#if defined(WIN32)
 #include "nanotimer_windows.h"
 #elif defined(__MACH__) || defined(__APPLE__)
 #include "nanotimer_macosx.h"
@@ -65,7 +65,7 @@ nanotime_t estimate_overhead(SEXP s_rho, int rounds) {
 }
 
 SEXP do_microtiming_precision(SEXP s_rho, SEXP s_times, SEXP s_warmup) {
-    UNPACK_INT(s_warmup, warmup); 
+    UNPACK_INT(s_warmup, warmup);
     UNPACK_INT(s_times, times);
     int n = 0;
     nanotime_t overhead = estimate_overhead(s_rho, warmup);
@@ -93,23 +93,23 @@ SEXP do_microtiming(SEXP s_exprs, SEXP s_rho, SEXP s_warmup) {
     int i, n_under_overhead = 0;
     int warn_start_end_equal = 0;
     R_len_t n_exprs = 0;
-    volatile SEXP s_tmp;    
+    volatile SEXP s_tmp;
     SEXP s_ret, s_expr;
     double *ret;
-   
+
     UNPACK_INT(s_warmup, warmup);
 
     /* Expressions */
     n_exprs = LENGTH(s_exprs);
 
     /* Environment in which to evaluate */
-    if(!isEnvironment(s_rho)) 
+    if(!isEnvironment(s_rho))
         error("'s_rho' should be an environment");
 
     /* Return value: */
     PROTECT(s_ret = allocVector(REALSXP, n_exprs));
     ret = REAL(s_ret);
-    
+
     /* Estimate minimal overhead and warm up the machine ... */
     overhead = estimate_overhead(s_rho, warmup);
 
@@ -119,7 +119,7 @@ SEXP do_microtiming(SEXP s_exprs, SEXP s_rho, SEXP s_warmup) {
         start = get_nanotime();
         s_tmp = eval(s_expr, s_rho);
         end = get_nanotime();
-        
+
         if (start < end) {
             const nanotime_t diff = end - start;
             if (diff < overhead) {
@@ -139,7 +139,7 @@ SEXP do_microtiming(SEXP s_exprs, SEXP s_rho, SEXP s_warmup) {
             error("Measured negative execution time! Please investigate and/or "
                   "contact the package author.");
         }
-        
+
         /* Housekeeping */
         R_CheckUserInterrupt();
         /* R_gc(); */
