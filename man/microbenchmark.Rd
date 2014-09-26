@@ -73,7 +73,12 @@ of calling the timing functions and the C function call overhead
 are estimated. This estimated overhead is subtracted from each
 measured evaluation time. Should the resulting timing be negative,
 a warning is thrown and the respective value is replaced by
-\code{NA}.
+\code{0}. If the timing is zero, a warning is raised.
+Should all evaluations result in one of the two error conditions described above, an error is raised.
+
+One platform on which the clock resolution is known to be too low to measure short runtimes with the required precision is Oracle Solaris on some SPARC hardware.
+Reports of other platforms with similar problems are welcome.
+Please contact the package maintainer.
 }
 \examples{
 ## Measure the time it takes to dispatch a simple function call
