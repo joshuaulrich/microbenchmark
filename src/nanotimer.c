@@ -6,6 +6,7 @@
 #include <R_ext/Memory.h>
 
 #include "sexp_macros.h"
+#include "do_nothing.h"
 
 /* FIXME: Find portable 64 bit integer type. */
 typedef uint64_t nanotime_t;
@@ -28,12 +29,6 @@ typedef uint64_t nanotime_t;
 #define NOINLINE
 #endif
 
-SEXP do_nothing(SEXP a, SEXP b) NOINLINE;
-
-SEXP do_nothing(SEXP a, SEXP b) {
-    return a;
-}
-
 nanotime_t estimate_overhead(SEXP s_rho, int rounds) {
     int i, n_back_in_time = 0;
     int observed_overhead = FALSE;
@@ -41,6 +36,7 @@ nanotime_t estimate_overhead(SEXP s_rho, int rounds) {
     nanotime_t start, end, overhead = UINT64_MAX;
     for (i = 0; i < rounds; ++i) {
         start = get_nanotime();
+        do_nothing();
         end = get_nanotime();
 
         const nanotime_t diff = end - start;
@@ -92,7 +88,6 @@ SEXP do_microtiming(SEXP s_exprs, SEXP s_rho, SEXP s_warmup) {
   nanotime_t start, end, overhead;
   int i, n_under_overhead = 0, n_start_end_equal = 0;
   R_len_t n_exprs = 0;
-  volatile SEXP s_tmp;
   SEXP s_ret, s_expr;
   double *ret;
 
@@ -116,7 +111,7 @@ SEXP do_microtiming(SEXP s_exprs, SEXP s_rho, SEXP s_warmup) {
   for (i = 0; i < n_exprs; ++i) {
     s_expr = VECTOR_ELT(s_exprs, i);
     start = get_nanotime();
-    s_tmp = eval(s_expr, s_rho);
+    eval(s_expr, s_rho);
     end = get_nanotime();
 
     if (start < end) {
