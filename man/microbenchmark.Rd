@@ -120,7 +120,7 @@ microbenchmark(2 + 2, 2 + a, f(2, a), f(2, 2), check=my_check)
 }
 }
 \author{
-Olaf Mersmann \email{olafm@p-value.net}
+Olaf Mersmann
 }
 \seealso{
 \code{\link{print.microbenchmark}} to display and

@@ -110,7 +110,7 @@
 #' microbenchmark(2 + 2, 2 + a, f(2, a), f(2, 2), check=my_check)
 #' }
 #' @export
-#' @author Olaf Mersmann \email{olafm@@p-value.net}
+#' @author Olaf Mersmann
 microbenchmark <- function(..., list=NULL,
                            times=100L,
                            unit,

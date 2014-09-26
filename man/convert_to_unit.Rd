@@ -31,6 +31,6 @@ The following units of time are supported \describe{
 }
 }
 \author{
-Olaf Mersmann \email{olafm@p-value.net}
+Olaf Mersmann
 }
 

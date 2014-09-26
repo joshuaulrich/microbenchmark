@@ -17,6 +17,6 @@ possible defaults based on other arguments that may or may not have been
 provided.
 }
 \author{
-Olaf Mersmann \email{olafm@statistik.tu-dortmund.de}
+Olaf Mersmann
 }
 

@@ -22,6 +22,6 @@ observed. This can be used to judge the granularity and resolution
 of the timing subsystem.
 }
 \author{
-Olaf Mersmann \email{olafm@statistik.tu-dortmund.de}
+Olaf Mersmann
 }
 

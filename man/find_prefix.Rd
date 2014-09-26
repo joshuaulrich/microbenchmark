@@ -18,7 +18,7 @@ e.g. -3 to suppress prefixes smaller than milli (m).}
 \item{maxexp}{maximum (decimal) exponent to consider,
 e.g. 3 to suppress prefixes larger than kilo (k).}
 
-\item{mu}{if \code{TRUE}, should a proper mu is used for micro, otherwise use
+\item{mu}{if \code{TRUE}, should a proper mu be used for micro, otherwise use
  u as ASCII-compatible replacement}
 }
 \value{

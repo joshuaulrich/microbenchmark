@@ -47,7 +47,7 @@ options(microbenchmark.unit="eps")
 print(res)
 }
 \author{
-Olaf Mersmann \email{olafm@p-value.net}
+Olaf Mersmann
 }
 \seealso{
 \code{\link{boxplot.microbenchmark}} and

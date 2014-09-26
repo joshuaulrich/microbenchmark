@@ -1,18 +1,18 @@
-##' Boxplot of \code{microbenchmark} timings.
-##'
-##' @param x A \code{microbenchmark} object.
-##' @param unit Unit in which the results be plotted.
-##' @param log Should times be plotted on log scale?
-##' @param xlab X axes label.
-##' @param ylab Y axes label.
-##' @param ... Passed on to boxplot.formula.
-##' 
-##' @export
-##' @method boxplot microbenchmark
-##'
-##' @importFrom graphics boxplot
-##' 
-##' @author Olaf Mersmann \email{olafm@@p-value.net}
+#' Boxplot of \code{microbenchmark} timings.
+#'
+#' @param x A \code{microbenchmark} object.
+#' @param unit Unit in which the results be plotted.
+#' @param log Should times be plotted on log scale?
+#' @param xlab X axes label.
+#' @param ylab Y axes label.
+#' @param ... Passed on to boxplot.formula.
+#' 
+#' @export
+#' @method boxplot microbenchmark
+#'
+#' @importFrom graphics boxplot
+#' 
+#' @author Olaf Mersmann
 boxplot.microbenchmark <- function(x, unit="t", log=TRUE, xlab, ylab, ...) {
   x$time <- convert_to_unit(x$time, unit)
   timeunits <- c("ns", "us", "ms", "s", "t")

@@ -1,6 +1,6 @@
 ## Internal utility functions
 
-##' Internal helper functions that returns a generic error if timings fail.
+#' Internal helper functions that returns a generic error if timings fail.
 .all_na_stop <- function() {
   msg <- "All measured timings are NA. This is bad!
 
@@ -32,29 +32,29 @@ resolve the issue with you."
   stop(msg, call.=FALSE)
 }
 
-##' Convert timings to different units.
-##'
-##' The following units of time are supported \describe{
-##' \item{\dQuote{ns}}{Nanoseconds.}
-##' \item{\dQuote{us}}{Microseconds.}
-##' \item{\dQuote{ms}}{Milliseconds.}
-##' \item{\dQuote{s}}{Seconds.}
-##' \item{\dQuote{t}}{Appropriately prefixed time unit.}
-##' \item{\dQuote{hz}}{Hertz / evaluations per second.}
-##' \item{\dQuote{eps}}{Evaluations per second / Hertz.}
-##' \item{\dQuote{khz}}{Kilohertz / 1000s of evaluations per second.}
-##' \item{\dQuote{mhz}}{Megahertz / 1000000s of evaluations per second.}
-##' \item{\dQuote{f}}{Appropriately prefixed frequency unit.}
-##' }
-##' 
-##' @param x An \code{microbenchmark} object.
-##' @param unit A unit of time. See details.
-##'
-##' @return A matrix containing the converted time values with an
-##'   attribute \code{unit} which is a printable name of the unit of
-##'   time.
-##'
-##' @author Olaf Mersmann \email{olafm@@p-value.net}
+#' Convert timings to different units.
+#'
+#' The following units of time are supported \describe{
+#' \item{\dQuote{ns}}{Nanoseconds.}
+#' \item{\dQuote{us}}{Microseconds.}
+#' \item{\dQuote{ms}}{Milliseconds.}
+#' \item{\dQuote{s}}{Seconds.}
+#' \item{\dQuote{t}}{Appropriately prefixed time unit.}
+#' \item{\dQuote{hz}}{Hertz / evaluations per second.}
+#' \item{\dQuote{eps}}{Evaluations per second / Hertz.}
+#' \item{\dQuote{khz}}{Kilohertz / 1000s of evaluations per second.}
+#' \item{\dQuote{mhz}}{Megahertz / 1000000s of evaluations per second.}
+#' \item{\dQuote{f}}{Appropriately prefixed frequency unit.}
+#' }
+#' 
+#' @param x An \code{microbenchmark} object.
+#' @param unit A unit of time. See details.
+#'
+#' @return A matrix containing the converted time values with an
+#'   attribute \code{unit} which is a printable name of the unit of
+#'   time.
+#'
+#' @author Olaf Mersmann
 convert_to_unit <- function(x,
                             unit=c("ns", "us", "ms", "s", "t",
                                    "hz", "khz", "mhz", "eps", "f")) {
@@ -80,48 +80,46 @@ convert_to_unit <- function(x,
           )
 }
 
-##' Find SI prefix for unit
-##' 
-##' @param x a numeric
-##' @param f function that produces the number from \code{x} that is used to
-##'   determine the prefix, e.g. \code{\link[base]{min}} or
-##'   \code{\link[stats]{median}}.
-##' @param minexp minimum (decimal) exponent to consider, 
-##'   e.g. -3 to suppress prefixes smaller than milli (m).
-##' @param maxexp maximum (decimal) exponent to consider, 
-##'   e.g. 3 to suppress prefixes larger than kilo (k).
-##' @param mu if \code{TRUE}, should a proper mu is used for micro, otherwise use
-##'  u as ASCII-compatible replacement
-##'
-##' @return character with the SI prefix
-##' @author Claudia Beleites 
-find_prefix <- function (x, f = min, minexp = -Inf, maxexp = Inf, mu = TRUE){
- 
+#' Find SI prefix for unit
+#' 
+#' @param x a numeric
+#' @param f function that produces the number from \code{x} that is used to
+#'   determine the prefix, e.g. \code{\link[base]{min}} or
+#'   \code{\link[stats]{median}}.
+#' @param minexp minimum (decimal) exponent to consider, 
+#'   e.g. -3 to suppress prefixes smaller than milli (m).
+#' @param maxexp maximum (decimal) exponent to consider, 
+#'   e.g. 3 to suppress prefixes larger than kilo (k).
+#' @param mu if \code{TRUE}, should a proper mu be used for micro, otherwise use
+#'  u as ASCII-compatible replacement
+#'
+#' @return character with the SI prefix
+#' @author Claudia Beleites 
+find_prefix <- function (x, f=min, minexp=-Inf, maxexp=Inf, mu=TRUE) {
   prefixes <- c ("y", "z", "a", "f", "p", "n", "u", "m", "",
                  "k", "M", "G", "T", "P", "E", "Z", "Y")
   if (mu) prefixes [7] <- "\u03bc"
 
   if (is.numeric (minexp)) minexp <- floor (minexp / 3) 
   if (is.numeric (minexp)) maxexp <- floor (maxexp / 3) 
-  
+
   e3 <- floor (log10 (f (x)) / 3)
   e3 <- max (e3, minexp, -8) # prefixes go from 10^-24 = 10^(3 * -8)
   e3 <- min (e3, maxexp,  8) # to 10^24 = 10^(3 * 8)
 
   prefixes [e3 + 9] # e3 of -8 => index 1
-}
+ }
 
-
-##' Return first non null argument.
-##'
-##' This function is useful when processing complex arguments with multiple
-##' possible defaults based on other arguments that may or may not have been
-##' provided.
-##'
-##' @param ... List of values.
-##' @return First non null element in \code{...}.
-##'
-##' @author Olaf Mersmann \email{olafm@@statistik.tu-dortmund.de}
+#' Return first non null argument.
+#'
+#' This function is useful when processing complex arguments with multiple
+#' possible defaults based on other arguments that may or may not have been
+#' provided.
+#'
+#' @param ... List of values.
+#' @return First non null element in \code{...}.
+#'
+#' @author Olaf Mersmann
 coalesce <- function(...) {
   isnotnull <- function(x) !is.null(x)
   Find(isnotnull, list(...))
