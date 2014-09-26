@@ -49,10 +49,16 @@ summary.microbenchmark <- function(object, unit, ...) {
     attr(res, "unit") <- attr(object$time, "unit")
   }
 
-  if (requireNamespace("multcomp", quietly=TRUE) &&
-      nrow(res) > 1 && all(res["neval"] > 1)) {
-    comp <- multcomp::glht(lm(time ~ expr, object), multcomp::mcp(expr = "Tukey"))
-    res$cld <- multcomp::cld(comp)$mcletters$monospacedLetters
+  if (requireNamespace("multcomp", quietly=TRUE) && nrow(res) > 1
+      && all(res["neval"] > 1)) {
+    ## Try to calculate a statistically meaningful comparison. If it fails for
+    ## any reason (f.e. the data might be constant), ignore the error.
+    tryCatch({
+      ops <- options(warn=-1)
+      mdl <- lm(time ~ expr, object)
+      comp <- multcomp::glht(mdl, multcomp::mcp(expr = "Tukey"))
+      res$cld <- multcomp::cld(comp)$mcletters$monospacedLetters
+    }, error=function(e) FALSE, finally=options(ops))
   }
   res
 }
