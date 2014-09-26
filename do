@@ -162,6 +162,16 @@ do_update <- function(args=NULL) {
   write.dcf(desc, file="DESCRIPTION")
 }
 
+do_checkspelling <- function(args) {
+  dictionaries <- "en_stats.rds"
+  if (file.exists("./.dict.rds"))
+    dictionaries <- c(dictionaries, "./.dict.rds")
+
+  do_update("man")
+  aspell(Sys.glob("man/*.Rd"), filter="Rd",
+         dictionaries=dictionaries)
+}
+
 do <- function(args) {
   if (length(args) < 1) {
     do_help()
@@ -175,6 +185,8 @@ do <- function(args) {
     do_clean(args[-1])
   } else if (args[1] == "update") {
     do_update(args[-1])
+  } else if (args[1] == "check-spelling") {
+    do_checkspelling()
   } else {
     messagef("ERROR: Unknown command '%s'.", args[1])
     do_help()
