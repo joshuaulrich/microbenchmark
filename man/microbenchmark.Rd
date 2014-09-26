@@ -76,7 +76,12 @@ a warning is thrown and the respective value is replaced by
 \code{0}. If the timing is zero, a warning is raised.
 Should all evaluations result in one of the two error conditions described above, an error is raised.
 
-One platform on which the clock resolution is known to be too low to measure short runtimes with the required precision is Oracle Solaris on some SPARC hardware.
+One platform on which the clock resolution is known to be too low to measure short runtimes with the required precision is
+Oracle\if{html}{\out{&reg;}}\if{latex}{\out{\textregistered\ }}\if{text}{(R)}
+Solaris
+on some
+SPARC\if{html}{\out{&reg;}}\ifelse{latex}{\out{\textregistered\ }}\if{text}{(R)}
+hardware.
 Reports of other platforms with similar problems are welcome.
 Please contact the package maintainer.
 }
