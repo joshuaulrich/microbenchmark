@@ -89,75 +89,84 @@ SEXP do_get_nanotime() {
 }
 
 SEXP do_microtiming(SEXP s_exprs, SEXP s_rho, SEXP s_warmup) {
-    nanotime_t start, end, overhead;
-    int i, n_under_overhead = 0;
-    int warn_start_end_equal = 0;
-    R_len_t n_exprs = 0;
-    volatile SEXP s_tmp;
-    SEXP s_ret, s_expr;
-    double *ret;
+  nanotime_t start, end, overhead;
+  int i, n_under_overhead = 0, n_start_end_equal = 0;
+  R_len_t n_exprs = 0;
+  volatile SEXP s_tmp;
+  SEXP s_ret, s_expr;
+  double *ret;
 
-    UNPACK_INT(s_warmup, warmup);
+  UNPACK_INT(s_warmup, warmup);
 
-    /* Expressions */
-    n_exprs = LENGTH(s_exprs);
+  /* Expressions */
+  n_exprs = LENGTH(s_exprs);
 
-    /* Environment in which to evaluate */
-    if(!isEnvironment(s_rho))
-        error("'s_rho' should be an environment");
+  /* Environment in which to evaluate */
+  if(!isEnvironment(s_rho))
+    error("'s_rho' should be an environment");
 
-    /* Return value: */
-    PROTECT(s_ret = allocVector(REALSXP, n_exprs));
-    ret = REAL(s_ret);
+  /* Return value: */
+  PROTECT(s_ret = allocVector(REALSXP, n_exprs));
+  ret = REAL(s_ret);
 
-    /* Estimate minimal overhead and warm up the machine ... */
-    overhead = estimate_overhead(s_rho, warmup);
+  /* Estimate minimal overhead and warm up the machine ... */
+  overhead = estimate_overhead(s_rho, warmup);
 
-    /* Actual timing... */
-    for (i = 0; i < n_exprs; ++i) {
-        s_expr = VECTOR_ELT(s_exprs, i);
-        start = get_nanotime();
-        s_tmp = eval(s_expr, s_rho);
-        end = get_nanotime();
+  /* Actual timing... */
+  for (i = 0; i < n_exprs; ++i) {
+    s_expr = VECTOR_ELT(s_exprs, i);
+    start = get_nanotime();
+    s_tmp = eval(s_expr, s_rho);
+    end = get_nanotime();
 
-        if (start < end) {
-            const nanotime_t diff = end - start;
-            if (diff < overhead) {
-                ret[i] = 0.0;
-                n_under_overhead++;
-            } else {
-                ret[i] = diff - overhead;
-            }
-        } else if (start == end) {
-            if (!warn_start_end_equal) {
-                warning("Could not measure execution time. Your clock might "
-                        "lack precision.");
-                warn_start_end_equal = 1;
-            }
-            ret[i] = 0.0;
-        } else {
-            error("Measured negative execution time! Please investigate and/or "
-                  "contact the package author.");
-        }
-
-        /* Housekeeping */
-        R_CheckUserInterrupt();
-        /* R_gc(); */
+    if (start < end) {
+      const nanotime_t diff = end - start;
+      if (diff < overhead) {
+        ret[i] = 0.0;
+        n_under_overhead++;
+      } else {
+        ret[i] = diff - overhead;
+      }
+    } else if (start == end) {
+      ++n_start_end_equal;
+      ret[i] = 0.0;
+    } else {
+      error("Measured negative execution time! Please investigate and/or "
+          "contact the package author.");
     }
 
-    /* Issue waring if we observed some timings below the estimated
-     * overhead.
-     */
-    if (n_under_overhead > 0) {
-        if (n_under_overhead == 1) {
-            warning("Estimated overhead was greater than measured evaluation "
-                    "time in 1 run.");
-        } else {
-            warning("Estimated overhead was greater than measured evaluation "
-                    "time in %i runs.", n_under_overhead);
-        }
-    }
+    /* Housekeeping */
+    R_CheckUserInterrupt();
+    /* R_gc(); */
+  }
 
-    UNPROTECT(1); /* s_ret */
-    return s_ret;
+  /* Issue waring if we observed some timings below the estimated
+   * overhead.
+   */
+  if (n_under_overhead > 0) {
+    if (n_under_overhead == 1) {
+      warning("Estimated overhead was greater than measured evaluation "
+          "time in 1 run.");
+    } else {
+      warning("Estimated overhead was greater than measured evaluation "
+          "time in %i runs.", n_under_overhead);
+    }
+  }
+  if (n_start_end_equal > 0) {
+    if (n_start_end_equal == 1) {
+      warning("Could not measure a positive execution time for one "
+          "evaluation.");
+    } else {
+      warning("Could not measure a positive execution time for %i "
+          "evaluations.", n_start_end_equal);
+    }
+  }
+  if (n_under_overhead + n_start_end_equal == n_exprs) {
+    error("All timed evaluations were either smaller than the estimated "
+        "overhead or zero. The most likely cause is a low resolution "
+        "clock. Feel free to contact the package maintainer for debug "
+        "the issue further.");
+  }
+  UNPROTECT(1); /* s_ret */
+  return s_ret;
 }
