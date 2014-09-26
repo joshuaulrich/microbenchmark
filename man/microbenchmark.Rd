@@ -80,7 +80,7 @@ One platform on which the clock resolution is known to be too low to measure sho
 Oracle\if{html}{\out{&reg;}}\if{latex}{\out{\textregistered\ }}\if{text}{(R)}
 Solaris
 on some
-SPARC\if{html}{\out{&reg;}}\ifelse{latex}{\out{\textregistered\ }}\if{text}{(R)}
+SPARC\if{html}{\out{&reg;}}\if{latex}{\out{\textregistered\ }}\if{text}{(R)}
 hardware.
 Reports of other platforms with similar problems are welcome.
 Please contact the package maintainer.
