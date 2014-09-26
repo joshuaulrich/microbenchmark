@@ -61,26 +61,28 @@ do_check <- function(args) {
   message("INFO: Checking package.")
   ok <- tryCatch(check(".", document=FALSE, quiet=TRUE, cleanup=FALSE,
                        check_dir=check_dir),
-                  error = function(e) FALSE)
+                 error = function(e) FALSE)
 
   if (ok) {
     ## Read check log lines
     lines <- readLines(check_log)
-    ## Find all lines containing WARNING or not starting with '* '
-    relevant_lines <- unique(sort(c(grep("WARNING", lines),
-                                    grep("^[^*]", lines))))
-
+    ## Find all lines containing stuff we know is OK or irrelevant
+    irrelevant_indexes <- c(grep("^\\* using", lines),
+                            grep("OK$", lines),
+                            grep("^\\* this is package .* version .*$", lines)
+                            )
+    relevant_lines <- lines[-irrelevant_indexes]
     ## Output all relevant lines
     if (length(relevant_lines) > 0) {
-      message("INFO: Found the following warnings:")
-      message(paste("  ", lines[relevant_lines], collapse="\n"))
+      message("INFO: Found the following anomalies in the log:")
+      message(paste("  ", relevant_lines, collapse="\n"))
       ## Because of Issue #507 we may get warnings # related to checking an UTF-8
       ## package in an ASCII locale.
       if (any(grepl(".*with.*encoding.*in.*an.*locale.*",
                     lines[relevant_lines]))) {
         message("INFO: Please ignore the encoding related WARNINGs. They are caused by devtools issue #507.")
       }
-   }
+    }
     ## Remove cruft
     unlink(check_dir, recursive=TRUE)
     message("INFO: Package passed R CMD check.")
