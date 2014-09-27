@@ -67,6 +67,7 @@ get_version_from_git <- function() {
 }
 
 do_build <- function(...) {
+  library("devtools", warn.conflicts=FALSE)
   args <- list(...)
   if (length(args) > 0) {
     if (args[[1]] != "help") {
