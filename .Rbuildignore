@@ -1,5 +1,6 @@
 ^dist/
 ^do
 ^examples/
+^.dict.rds
 ^src/.*\.o
 ^src/.*\.so

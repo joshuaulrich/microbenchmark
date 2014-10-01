@@ -22,6 +22,6 @@
 Boxplot of \code{microbenchmark} timings.
 }
 \author{
-Olaf Mersmann \email{olafm@p-value.net}
+Olaf Mersmann
 }
 

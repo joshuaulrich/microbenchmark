@@ -11,4 +11,7 @@ returned. This can be used as a time stamp for logging or similar
 purposes. Please note that there is no common reference, that is,
 the timer value cannot be converted to a date and time value.
 }
+\author{
+Olaf Mersmann
+}
 
