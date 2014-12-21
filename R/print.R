@@ -40,7 +40,7 @@
 #' @author Olaf Mersmann
 print.microbenchmark <- function(x, unit, order, signif, ...) {
   s <- summary(x, unit=unit)
-  timing_cols <- c("min", "lq", "median", "uq", "max")
+  timing_cols <- c("min", "lq", "median", "uq", "max", "mean")
   if (!missing(signif)) {
     s[timing_cols] <- lapply(s[timing_cols], base::signif, signif)
   }
