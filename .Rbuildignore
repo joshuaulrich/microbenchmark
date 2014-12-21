@@ -4,3 +4,4 @@
 ^.dict.rds
 ^src/.*\.o
 ^src/.*\.so
+README.md
