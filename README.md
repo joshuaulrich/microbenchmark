@@ -7,5 +7,6 @@ package):
 
 ```splus
 library("devtools")
-install_github("olafmersmann/emoa")
+install_github("olafmersmann/microbenchmarkCore")
+install_github("olafmersmann/microbenchmark")
 ```

@@ -6,10 +6,11 @@ Authors@R: c( person("Olaf", "Mersmann", role=c("aut", "cre"),
         email="olafm@p-value.net"), person("Claudia", "Beleites",
         role=c("ctb")), person("Rainer", "Hurling", role=c("ctb")),
         person("Ari", "Friedman", role=c("ctb")))
+URL: http://git.p-value.net/p/microbenchmark.git/
+BugReports: https://github.com/olafmersmann/microbenchmark/issues/
 License: BSD_2_clause + file LICENSE
-Imports: graphics, ggplot2
-Suggests: multcomp
+Depends: microbenchmarkCore
+Imports: graphics, ggplot2, multcomp
 ByteCompile: yes
 LazyData: yes
-Version: 1.4-2.5
-URL: http://git.p-value.net/p/microbenchmark.git/
+Version: 1.4-2.7

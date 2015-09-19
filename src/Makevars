@@ -1,9 +1,0 @@
-PKG_LIBS_Linux = -lrt
-PKG_LIBS = $(PKG_LIBS_$(shell uname -s))
-##
-## Some compilers (in C99 mode) will not define _POSIX_C_SOURCE for
-## us. In that case time.h does not define the required structures. So
-## for the sake of easy installation, we manually set it if it is not
-## set.
-##
-PKG_CPPFLAGS = -D_POSIX_C_SOURCE=200112L

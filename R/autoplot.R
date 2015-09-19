@@ -10,9 +10,7 @@
 #'   the maximum value)
 #' @return A ggplot2 plot
 #'
-#' @importFrom ggplot2 autoplot ggplot aes_string
-#' @importFrom ggplot2 stat_ydensity coord_flip coord_cartesian
-#' @importFrom ggplot2 scale_x_discrete scale_y_log10 scale_y_continuous
+#' @importFrom ggplot2 autoplot
 #' @export
 #' @method autoplot microbenchmark
 #' @examples
@@ -28,18 +26,19 @@
 autoplot.microbenchmark <- function(object, ...,
                                     log=TRUE,
                                     y_max=1.05 * max(object$time)) {
+  if (!requireNamespace("ggplot2"))
+    stop("Missing package 'ggplot2'.")
   y_min <- 0
   object$ntime <- convert_to_unit(object$time, "t")
-  plt <- ggplot(object, ggplot2::aes_string(x="expr", y="ntime"))
-  plt <- plt + coord_cartesian(ylim=c(y_min , y_max))
-  plt <- plt + stat_ydensity()
-  plt <- plt + scale_x_discrete(name="")
+  plt <- ggplot2::ggplot(object, ggplot2::aes_string(x="expr", y="ntime"))
+  plt <- plt + ggplot2::coord_cartesian(ylim=c(y_min , y_max))
+  plt <- plt + ggplot2::stat_ydensity()
+  plt <- plt + ggplot2::scale_x_discrete(name="")
+  y_label <- sprintf("Time [%s]", attr(object$ntime, "unit"))
   plt <- if (log) {
-    plt + scale_y_log10(name=sprintf("Time [%s]",
-                                              attr(object$ntime, "unit")))
+    plt + ggplot2::scale_y_log10(name=y_label)
   } else {
-    plt + scale_y_continuous(name=sprintf("Time [%s]",
-                                                   attr(object$ntime, "unit")))
+    plt + ggplot2::scale_y_continuous(name=y_label)
   }
   plt <- plt + ggplot2::coord_flip()
   plt

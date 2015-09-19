@@ -1,0 +1,1 @@
+#' @importFrom microbenchmarkCore microbenchmark
