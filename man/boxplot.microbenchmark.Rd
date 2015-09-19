@@ -4,7 +4,8 @@
 \alias{boxplot.microbenchmark}
 \title{Boxplot of \code{microbenchmark} timings.}
 \usage{
-\method{boxplot}{microbenchmark}(x, unit = "t", log = TRUE, xlab, ylab, ...)
+\method{boxplot}{microbenchmark}(x, unit = "t", log = TRUE, xlab, ylab,
+  horizontal = FALSE, ...)
 }
 \arguments{
 \item{x}{A \code{microbenchmark} object.}
@@ -13,9 +14,11 @@
 
 \item{log}{Should times be plotted on log scale?}
 
-\item{xlab}{X axes label.}
+\item{xlab}{X axis label.}
 
-\item{ylab}{Y axes label.}
+\item{ylab}{Y axis label.}
+
+\item{horizontal}{Switch X and Y axes.}
 
 \item{...}{Passed on to boxplot.formula.}
 }

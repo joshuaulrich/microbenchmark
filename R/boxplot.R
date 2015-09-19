@@ -3,8 +3,9 @@
 #' @param x A \code{microbenchmark} object.
 #' @param unit Unit in which the results be plotted.
 #' @param log Should times be plotted on log scale?
-#' @param xlab X axes label.
-#' @param ylab Y axes label.
+#' @param xlab X axis label.
+#' @param ylab Y axis label.
+#' @param horizontal Switch X and Y axes.
 #' @param ... Passed on to boxplot.formula.
 #' 
 #' @export
@@ -13,11 +14,12 @@
 #' @importFrom graphics boxplot
 #' 
 #' @author Olaf Mersmann
-boxplot.microbenchmark <- function(x, unit="t", log=TRUE, xlab, ylab, ...) {
+boxplot.microbenchmark <- function(x, unit="t", log=TRUE, xlab, ylab, 
+                                   horizontal=FALSE, ...) {
   x$time <- convert_to_unit(x$time, unit)
   timeunits <- c("ns", "us", "ms", "s", "t")
   frequnits <- c("hz", "khz", "mhz", "eps", "f")
-  
+
   if (missing(xlab))
     xlab <- "Expression"
   if (missing(ylab)) {
@@ -39,7 +41,12 @@ boxplot.microbenchmark <- function(x, unit="t", log=TRUE, xlab, ylab, ...) {
         unit
     }
   }
-  ll <- if (log) "y" else ""
-  
-  boxplot(time ~ expr, data=x, xlab=xlab, ylab=ylab, log=ll, ...)
+  if (horizontal) { 
+    ll <- if (log) "x" else ""
+    boxplot(time ~ expr, data=x, xlab=ylab, ylab=xlab, log=ll, 
+            horizontal=TRUE, ...)
+  } else {
+    ll <- if (log) "y" else ""
+    boxplot(time ~ expr, data=x, xlab=xlab, ylab=ylab, log=ll, ...)
+  }
 }

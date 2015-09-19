@@ -13,4 +13,4 @@ Depends: microbenchmarkCore
 Imports: graphics, ggplot2, multcomp
 ByteCompile: yes
 LazyData: yes
-Version: 1.4-2.7
+Version: 1.4-2.8
