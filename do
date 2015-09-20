@@ -1,9 +1,11 @@
 #!/usr/bin/env Rscript
 
-## NOTE: We do not load all required packages upfront because most 
+## NOTE: We do not load all required packages upfront because most
 ##   commands only require a subset or no extra packages at all and loading
-##   packages is expensive. So in the interest of fast startup, they are 
+##   packages is expensive. So in the interest of fast startup, they are
 ##   loaded on demand by the respective functions.
+
+SELFUPGRADE_URL <- "https://raw.githubusercontent.com/olafmersmann/do-r/master/do"
 
 catf <- function(fmt, ...) cat(sprintf(fmt, ...))
 messagef <- function(fmt, ...) message(sprintf(fmt, ...))
@@ -28,7 +30,7 @@ parse_arguments <- function(arguments) {
 
 help_line <- function(commandline, helptext) {
   messagef("  ./do %s", commandline)
-  messagef(strwrap(helptext, indent=6, exdent=6))
+  messagef(paste(strwrap(helptext, indent=6, exdent=6), collapse="\n"))
 }
 
 package_name <- function() {
@@ -67,6 +69,7 @@ get_version_from_git <- function() {
 }
 
 do_build <- function(...) {
+  library("devtools", warn.conflicts=FALSE)
   args <- list(...)
   if (length(args) > 0) {
     if (args[[1]] != "help") {
@@ -75,13 +78,13 @@ do_build <- function(...) {
     help_line("build", "Build a source package.")
     return(invisible())
   }
-  library("devtools", warn.conflicts=FALSE)
   do_update("all")
   message("INFO: Building package.")
   if (!file.exists("dist"))
     dir.create("dist")
   fn <- build(".", path="dist", quiet=TRUE)
   messagef("INFO: Package source tarball '%s' created.", fn)
+  invisible(fn)
 }
 
 do_check <- function(subcommand, ...) {
@@ -211,6 +214,48 @@ do_update <- function(subcommand, ...) {
     do_update("namespace")
     do_update("man")
     do_update("version")
+  }
+ }
+
+do_selfupgrade <- function(...) {
+  args <- list(...)
+  if (length(args) > 0 && args[[1]] == "help") {
+    help_line("selfupgrade", "Replace do script with latest version from public repository. Note: This will unconditionally overwrite any changes you may have made to the do script.")
+    return(invisible())
+  }
+  if (file.exists("do.tmp"))
+    die(100, "File 'do.tmp' from previous selfupgrade attempt exists. Please remove it and retry.")
+
+  download.file(SELFUPGRADE_URL, "do.tmp", method="curl")
+  if (file.exists("do.tmp")) {
+    ## Check that we can parse the script.
+    ok <- tryCatch({
+      parse("do.tmp")
+      TRUE
+    }, error=function(e) FALSE)
+    if (ok) {
+      file.rename("do.tmp", "do")
+      ## Avoid user modifications by only setting read and execute bits on do
+      Sys.chmod("do", mode="0555", use_umask=FALSE)
+    } else {
+      die(100, "The new do script (file 'do.tmp') appears to be corrupt. Please investigate!")
+    }
+  } else {
+    die(100, "Failed to download new do script to file 'do.tmp'.")
+  }
+}
+
+do_drat <- function(subcommand, ...) {
+  if (missing(subcommand))
+    subcommand <- "help"
+
+  if (subcommand == "help") {
+    help_line("drat publish", "Publish package to drat repository.")
+  } else if (subcommand == "publish") {
+    library("drat", warn.conflicts=FALSE)
+    fn <- do_build()
+    insertPackage(fn, "../drat", commit=TRUE)
+    message("INFO: Source package published to drat repository '../drat'.")
   }
 }
 
