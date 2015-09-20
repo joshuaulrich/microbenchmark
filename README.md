@@ -7,6 +7,7 @@ From time to time I release development version to my private R package reposito
 To install from this repository run:
 
 ```splus
+install.packages("microbenchmarkCore", repos="http://olafmersmann.github.io/drat")
 install.packages("microbenchmark", repos="http://olafmersmann.github.io/drat")
 ```
 
@@ -16,6 +17,7 @@ To install the bleeding edge version from GitHub run (requires the `devtools` pa
 
 ```splus
 library("devtools")
+install_github("olafmersmann/microbenchmarkCore")
 install_github("olafmersmann/microbenchmark")
 ```
 
