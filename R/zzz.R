@@ -1,1 +1,2 @@
 #' @importFrom microbenchmarkCore microbenchmark
+NULL
