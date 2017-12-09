@@ -9,8 +9,8 @@ Authors@R: c( person("Olaf", "Mersmann", role=c("aut", "cre"),
 URL: https://github.com/olafmersmann/microbenchmark/
 BugReports: https://github.com/olafmersmann/microbenchmark/issues/
 License: BSD_2_clause + file LICENSE
-Depends: microbenchmarkCore
-Imports: graphics, ggplot2, multcomp
+Imports: graphics, stats
+Suggests: ggplot2, multcomp
 ByteCompile: yes
 LazyData: yes
 Version: 1.4-2.11

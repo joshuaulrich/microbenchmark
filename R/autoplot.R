@@ -10,11 +10,9 @@
 #'   the maximum value)
 #' @return A ggplot2 plot
 #'
-#' @importFrom ggplot2 autoplot
 #' @export
-#' @method autoplot microbenchmark
 #' @examples
-#' library("ggplot2")
+#' if (require("ggplot2")) {
 #'
 #' tm <- microbenchmark(rchisq(100, 0),
 #'                      rchisq(100, 1),
@@ -22,6 +20,7 @@
 #'                      rchisq(100, 3),
 #'                      rchisq(100, 5), times=1000L)
 #' autoplot(tm)
+#' }
 #' @author Ari Friedman, Olaf Mersmann
 autoplot.microbenchmark <- function(object, ...,
                                     log=TRUE,

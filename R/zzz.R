@@ -1,2 +1,0 @@
-#' @importFrom microbenchmarkCore microbenchmark
-NULL

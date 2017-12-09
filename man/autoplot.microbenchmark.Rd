@@ -5,7 +5,7 @@
 \title{Autoplot method for microbenchmark objects: Prettier graphs for
 microbenchmark using ggplot2}
 \usage{
-\method{autoplot}{microbenchmark}(object, ..., log = TRUE, y_max = 1.05 *
+autoplot.microbenchmark(object, ..., log = TRUE, y_max = 1.05 *
   max(object$time))
 }
 \arguments{
@@ -25,7 +25,7 @@ A ggplot2 plot
 Uses ggplot2 to produce a more legible graph of microbenchmark timings
 }
 \examples{
-library("ggplot2")
+if (require("ggplot2")) {
 
 tm <- microbenchmark(rchisq(100, 0),
                      rchisq(100, 1),
@@ -33,6 +33,7 @@ tm <- microbenchmark(rchisq(100, 0),
                      rchisq(100, 3),
                      rchisq(100, 5), times=1000L)
 autoplot(tm)
+}
 }
 \author{
 Ari Friedman, Olaf Mersmann
