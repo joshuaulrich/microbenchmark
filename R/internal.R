@@ -1,6 +1,6 @@
 ## Internal utility functions
 
-#' Internal helper functions that returns a generic error if timings fail.
+# Internal helper functions that returns a generic error if timings fail.
 .all_na_stop <- function() {
   msg <- "All measured timings are NA. This is bad!
 

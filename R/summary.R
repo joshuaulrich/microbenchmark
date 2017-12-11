@@ -18,6 +18,7 @@
 #' @return A \code{data.frame} containing the aggregated results.
 #'
 #' @seealso \code{\link{print.microbenchmark}}
+#' @importFrom stats aggregate fivenum lm
 #' @export
 #' @method summary microbenchmark
 summary.microbenchmark <- function(object, unit, ...) {
