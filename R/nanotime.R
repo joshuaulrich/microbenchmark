@@ -9,5 +9,5 @@
 #' @author Olaf Mersmann
 #' @export
 get_nanotime <- function() {
-  .Call(do_get_nanotime)
+  .Call(do_get_nanotime, PACKAGE="microbenchmark")
 }

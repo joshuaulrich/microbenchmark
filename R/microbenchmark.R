@@ -157,7 +157,7 @@ microbenchmark <- function(..., list=NULL,
     stop("Unknown ordering. Must be one of 'random', 'inorder' or 'block'.")
   exprs <- exprs[o]
 
-  res <- .Call(do_microtiming, exprs, parent.frame(), as.integer(control$warmup))
+  res <- .Call(do_microtiming, exprs, parent.frame(), as.integer(control$warmup), PACKAGE="microbenchmark")
 
   ## Sanity check. Fail as early as possible if the results are
   ## rubbish.

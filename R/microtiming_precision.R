@@ -16,5 +16,6 @@
 microtiming_precision <- function(rounds=100L, warmup=2^18) {
   .Call(do_microtiming_precision, parent.frame(),
         as.integer(rounds),
-        as.integer(warmup))
+        as.integer(warmup),
+        PACKAGE="microbenchmark")
 }
