@@ -1,4 +1,29 @@
-*.so
+# History and data files
+.Rhistory
+.Rapp.history
+.RData
+
+# RStudio files
+.Rproj.user/
+
+# produced vignettes
+vignettes/*.html
+vignettes/*.pdf
+
+# knitr and R markdown
+/*_cache/
+/cache/
+*.utf8.md
+*.knit.md
+
+# object and shared objects
 *.o
-*.check
+*.so
+
+# vim
+*.swp
+*.swo
+*~
+
+# other
 dist
