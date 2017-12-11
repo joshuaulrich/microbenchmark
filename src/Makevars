@@ -1,5 +1,4 @@
 PKG_LIBS_Linux = -lrt
-PKG_LIBS = $(PKG_LIBS_$(shell uname -s))
 ##
 ## Some compilers (in C99 mode) will not define _POSIX_C_SOURCE for
 ## us. In that case time.h does not define the required structures. So
