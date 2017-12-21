@@ -34,3 +34,4 @@ The following units of time are supported \describe{
 \author{
 Olaf Mersmann
 }
+\keyword{internal}

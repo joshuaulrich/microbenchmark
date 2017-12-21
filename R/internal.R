@@ -55,6 +55,8 @@ resolve the issue with you."
 #'   time.
 #'
 #' @author Olaf Mersmann
+#'
+#' @keywords internal
 convert_to_unit <- function(x,
                             unit=c("ns", "us", "ms", "s", "t",
                                    "hz", "khz", "mhz", "eps", "f")) {
@@ -95,6 +97,8 @@ convert_to_unit <- function(x,
 #'
 #' @return character with the SI prefix
 #' @author Claudia Beleites 
+#'
+#' @keywords internal
 find_prefix <- function (x, f=min, minexp=-Inf, maxexp=Inf, mu=TRUE) {
   prefixes <- c ("y", "z", "a", "f", "p", "n", "u", "m", "",
                  "k", "M", "G", "T", "P", "E", "Z", "Y")
@@ -120,6 +124,8 @@ find_prefix <- function (x, f=min, minexp=-Inf, maxexp=Inf, mu=TRUE) {
 #' @return First non null element in \code{...}.
 #'
 #' @author Olaf Mersmann
+#'
+#' @keywords internal
 coalesce <- function(...) {
   isnotnull <- function(x) !is.null(x)
   Find(isnotnull, list(...))
