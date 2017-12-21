@@ -2,16 +2,18 @@ Package: microbenchmark
 Title: Accurate Timing Functions
 Description: Provides infrastructure to accurately measure and compare
         the execution time of R expressions.
-Authors@R: c( person("Olaf", "Mersmann", role=c("aut", "cre"),
-        email="olafm@p-value.net"), person("Claudia", "Beleites",
-        role=c("ctb")), person("Rainer", "Hurling", role=c("ctb")),
-        person("Ari", "Friedman", role=c("ctb")))
-URL: https://github.com/olafmersmann/microbenchmark/
-BugReports: https://github.com/olafmersmann/microbenchmark/issues/
+Authors@R: c(person("Olaf", "Mersmann", role=c("aut")),
+        person("Claudia", "Beleites", role=c("ctb")),
+        person("Rainer", "Hurling", role=c("ctb")),
+        person("Ari", "Friedman", role=c("ctb")),
+        person(given=c("Joshua","M."), family="Ulrich", role="cre",
+               email="josh.m.ulrich@gmail.com"))
+URL: https://github.com/joshuaulrich/microbenchmark/
+BugReports: https://github.com/joshuaulrich/microbenchmark/issues/
 License: BSD_2_clause + file LICENSE
 Imports: graphics, stats
 Suggests: ggplot2, multcomp
 ByteCompile: yes
 LazyData: yes
-Version: 1.4-2.11
+Version: 1.4-3
 RoxygenNote: 6.0.1
