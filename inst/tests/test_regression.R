@@ -1,6 +1,8 @@
-context("Regressions")
+library(microbenchmark)
 
-test_that("units argument is sane", {
-  expect_error(microbenchmark(NULL, units=a))  
-})
-          
+test_units_argument <- function()
+{
+  out <- try(microbenchmark(NULL, units=a), silent = TRUE)
+  stopifnot(inherits(out, "try-error"))
+}
+test_units_argument()
