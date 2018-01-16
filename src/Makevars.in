@@ -1,10 +1,8 @@
-PKG_LIBS_Linux = -lrt
-MB_SYS = `uname -s`
-PKG_LIBS = $(PKG_LIBS_$(MB_SYS))
+PKG_LIBS = @MB_LIBS@
 ##
 ## Some compilers (in C99 mode) will not define _POSIX_C_SOURCE for
 ## us. In that case time.h does not define the required structures. So
 ## for the sake of easy installation, we manually set it if it is not
 ## set.
 ##
-PKG_CPPFLAGS = -D_POSIX_C_SOURCE=200112L
+PKG_CPPFLAGS = -D_POSIX_C_SOURCE=200112L @DEFS@

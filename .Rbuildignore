@@ -1,7 +1,8 @@
 ^dist/
 ^do
-^examples/
+^examples$
 ^.dict.rds
+^.*\.cache$
 
 ^src/.*\.o
 ^src/.*\.so
