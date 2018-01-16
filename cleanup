@@ -1,0 +1,3 @@
+#!/bin/sh
+
+rm config.log config.status src/config.h src/Makevars
