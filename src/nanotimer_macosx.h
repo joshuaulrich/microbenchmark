@@ -9,5 +9,5 @@ static nanotime_t get_nanotime(void) {
     mach_timebase_info(&info);
     
     /* Convert to nanoseconds */
-    return time * (info.numer / info.denom);
+    return (nanotime_t)(time * (info.numer / info.denom));
 }

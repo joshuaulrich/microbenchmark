@@ -6,5 +6,5 @@ static nanotime_t get_nanotime(void) {
     QueryPerformanceFrequency(&frequency);
 
     /* Convert to nanoseconds */
-    return 1.0e9 * time_var.QuadPart / frequency.QuadPart;
+    return (nanotime_t)(1.0e9 * time_var.QuadPart / frequency.QuadPart);
 }

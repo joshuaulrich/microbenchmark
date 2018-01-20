@@ -14,5 +14,6 @@
 
 /* short an sweet! */
 static nanotime_t get_nanotime(void) {
-    return gethrtime();
+    hrtime_t hrtime = gethrtime();
+    return (nanotime_t)hrtime;
 }
