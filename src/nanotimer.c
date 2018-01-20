@@ -12,7 +12,6 @@
 #include "sexp_macros.h"
 #include "do_nothing.h"
 
-/* FIXME: Find portable 64 bit integer type. */
 typedef uint64_t nanotime_t;
 
 #if defined(WIN32)
