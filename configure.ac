@@ -125,7 +125,27 @@ if test "${mb_cv_have_timer}" = "no"; then
   fi
 fi
 
-# TODO: add gettimeofday
+# gettimeofday
+if test "${mb_cv_have_timer}" = "no"; then
+  AC_MSG_WARN(cannot find a high-resolution timer. Falling back to system \
+              time, which is unreliable for benchmarks.)
+  AC_TRY_COMPILE(
+  [
+    #include <sys/time.h>
+  ],
+  [
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+  ],
+  mb_cv_gettimeofday="yes",
+  mb_cv_gettimeofday="no")
+
+  if test "${mb_cv_func_gettimeofday}" = "yes"; then
+    AC_DEFINE_UNQUOTED([MB_HAVE_GETTIMEOFDAY], [1],
+      [Define to 1 if you have the `gettimeofday` function.])
+    mb_cv_have_timer="yes"
+  fi
+fi
 
 # nothing
 if test "${mb_cv_have_timer}" = "no"; then

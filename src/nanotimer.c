@@ -23,7 +23,9 @@ typedef uint64_t nanotime_t;
 #include "nanotimer_gettime.h"
 #elif defined(MB_HAVE_GETHRTIME)
 #include "nanotimer_rtposix.h"
-#else /* Unsupported OS */
+#elif defined(MB_HAVE_GETTIMEOFDAY)
+#include "nanotimer_gettimeofday.h"
+#else /* ./configure should prevent this, but just in case... */
 #error "Unsupported OS."
 #endif
 
