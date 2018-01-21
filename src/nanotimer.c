@@ -19,7 +19,7 @@ typedef uint64_t nanotime_t;
 #elif defined(MB_HAVE_MACH_TIME)
 #include "nanotimer_macosx.h"
 #elif defined(MB_HAVE_CLOCK_GETTIME) && defined(MB_CLOCKID_T)
-#include "nanotimer_gettime.h"
+#include "nanotimer_clock_gettime.h"
 #elif defined(MB_HAVE_GETHRTIME)
 #include "nanotimer_rtposix.h"
 #elif defined(MB_HAVE_GETTIMEOFDAY)
