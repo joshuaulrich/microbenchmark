@@ -1,11 +1,11 @@
 library(microbenchmark)
 
-test_units_argument <- function()
+test_unit_argument <- function()
 {
-  out <- try(microbenchmark(NULL, units=a), silent = TRUE)
+  out <- try(microbenchmark(NULL, unit=a), silent = TRUE)
   stopifnot(inherits(out, "try-error"))
 }
-test_units_argument()
+test_unit_argument()
 
 test_simple_timing <- function()
 {
