@@ -68,7 +68,7 @@ convert_to_unit <- function(x,
           f=unit <- sprintf ("%shz", find_prefix(1e9 / x,
             minexp =  0, maxexp = 6, mu = FALSE))
           )
-  
+  unit <- tolower(unit)
   switch (unit,
           ns  ={attr(x, "unit") <- "nanoseconds"           ; unclass(x      )},
           us  ={attr(x, "unit") <- "microseconds"          ; unclass(x / 1e3)},
