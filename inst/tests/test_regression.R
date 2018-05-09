@@ -40,3 +40,15 @@ test_microtiming_precision <- function()
   }
 }
 test_microtiming_precision()
+
+test_setup_expression <- function()
+{
+  my_check <- function(values) {
+    v1 <- values[[1]]
+    all(sapply(values[-1], function(x) identical(v1, x)))
+  }
+  set.seed(21)
+  x <- rnorm(10)
+  microbenchmark(rnorm(10), x, check = my_check, setup = set.seed(21))
+}
+test_setup_expression()

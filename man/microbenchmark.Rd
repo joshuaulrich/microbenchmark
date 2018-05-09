@@ -5,7 +5,7 @@
 \title{Sub-millisecond accurate timing of expression evaluation.}
 \usage{
 microbenchmark(..., list = NULL, times = 100L, unit, check = NULL,
-  control = list())
+  control = list(), setup = NULL)
 }
 \arguments{
 \item{...}{Expressions to benchmark.}
@@ -118,6 +118,14 @@ microbenchmark(2 + 2, 2 + a, f(2, a), f(2, 2), check=my_check)
 a <- 3
 ## Check fails
 microbenchmark(2 + 2, 2 + a, f(2, a), f(2, 2), check=my_check)
+}
+## Example setup usage
+set.seed(21)
+x <- rnorm(10)
+microbenchmark(x, rnorm(10), check=my_check, setup=set.seed(21))
+## Will fail without setup
+\dontrun{
+microbenchmark(x, rnorm(10), check=my_check)
 }
 }
 \seealso{

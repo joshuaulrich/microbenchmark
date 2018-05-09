@@ -109,13 +109,22 @@
 #' ## Check fails
 #' microbenchmark(2 + 2, 2 + a, f(2, a), f(2, 2), check=my_check)
 #' }
+#' ## Example setup usage
+#' set.seed(21)
+#' x <- rnorm(10)
+#' microbenchmark(x, rnorm(10), check=my_check, setup=set.seed(21))
+#' ## Will fail without setup
+#' \dontrun{
+#' microbenchmark(x, rnorm(10), check=my_check)
+#' }
 #' @export
 #' @author Olaf Mersmann
 microbenchmark <- function(..., list=NULL,
                            times=100L,
                            unit,
                            check=NULL,
-                           control=list()) {
+                           control=list(),
+                           setup=NULL) {
   stopifnot(times == as.integer(times))
   if (!missing(unit))
     stopifnot(is.character("unit"), length(unit) == 1L)
@@ -135,6 +144,10 @@ microbenchmark <- function(..., list=NULL,
   names(exprs) <- nm
 
   if (!is.null(check)) {
+    if (!is.null(setup)) {
+      exprs <- lapply(exprs, function(e) c(setup, e))
+    }
+
     ## Evaluate values in parent environment
     values <- lapply(exprs, eval, parent.frame())
     ok <- check(values)
@@ -157,7 +170,9 @@ microbenchmark <- function(..., list=NULL,
     stop("Unknown ordering. Must be one of 'random', 'inorder' or 'block'.")
   exprs <- exprs[o]
 
-  res <- .Call(do_microtiming, exprs, parent.frame(), as.integer(control$warmup), PACKAGE="microbenchmark")
+  res <- .Call(do_microtiming, exprs, parent.frame(),
+               as.integer(control$warmup), setup,
+               PACKAGE="microbenchmark")
 
   ## Sanity check. Fail as early as possible if the results are
   ## rubbish.
