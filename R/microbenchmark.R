@@ -143,13 +143,15 @@ microbenchmark <- function(..., list=NULL,
     nm[nm == ""] <- exprnm[nm == ""]
   names(exprs) <- nm
 
+  env <- new.env(parent = parent.frame())
+  setup <- substitute(setup)
+
   if (!is.null(check)) {
-    if (!is.null(setup)) {
-      exprs <- lapply(exprs, function(e) c(setup, e))
-    }
+    setupexpr <- as.expression(setup)
+    checkexprs <- lapply(exprs, function(e) c(setupexpr, e))
 
     ## Evaluate values in parent environment
-    values <- lapply(exprs, eval, parent.frame())
+    values <- lapply(checkexprs, eval, env)
     ok <- check(values)
 
     if (!isTRUE(ok)) {
@@ -170,7 +172,7 @@ microbenchmark <- function(..., list=NULL,
     stop("Unknown ordering. Must be one of 'random', 'inorder' or 'block'.")
   exprs <- exprs[o]
 
-  res <- .Call(do_microtiming, exprs, parent.frame(),
+  res <- .Call(do_microtiming, exprs, env,
                as.integer(control$warmup), setup,
                PACKAGE="microbenchmark")
 

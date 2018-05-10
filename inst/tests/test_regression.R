@@ -1,4 +1,6 @@
 library(microbenchmark)
+library(methods)
+options(error = traceback)
 
 test_unit_argument <- function()
 {
@@ -43,6 +45,16 @@ test_microtiming_precision()
 
 test_setup_expression <- function()
 {
+  set.seed(21)
+  x <- rnorm(10)
+  y <- NULL
+  microbenchmark(y <<- rnorm(10), x, setup = set.seed(21))
+  stopifnot(identical(x, y))
+}
+test_setup_expression()
+
+test_setup_expression_check <- function()
+{
   my_check <- function(values) {
     v1 <- values[[1]]
     all(sapply(values[-1], function(x) identical(v1, x)))
@@ -51,4 +63,26 @@ test_setup_expression <- function()
   x <- rnorm(10)
   microbenchmark(rnorm(10), x, check = my_check, setup = set.seed(21))
 }
-test_setup_expression()
+test_setup_expression_check()
+
+test_setup_expression_eval_env_check <- function()
+{
+  my_check <- function(values) {
+    v1 <- values[[1]]
+    all(sapply(values[-1], function(x) identical(v1, x)))
+  }
+  set.seed(21)
+  x <- rnorm(10)
+  microbenchmark(rnorm(n), x, check = my_check,
+                 setup = {set.seed(21); n <- 10})
+}
+test_setup_expression_eval_env_check()
+
+test_setup_expression_eval_env <- function()
+{
+  x <- rnorm(10)
+  y <- NULL
+  microbenchmark(y <<- rnorm(n), x, setup = {n <- 10})
+  stopifnot(length(y) == 10L)
+}
+test_setup_expression_eval_env()
