@@ -90,7 +90,7 @@
 #'
 #' ## Pretty plot:
 #' if (requireNamespace("ggplot2")) {
-#'   autoplot(res)
+#'   ggplot2::autoplot(res)
 #' }
 #'
 #' ## Example check usage

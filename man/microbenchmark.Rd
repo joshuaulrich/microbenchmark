@@ -99,8 +99,8 @@ print(res)
 boxplot(res)
 
 ## Pretty plot:
-if (require("ggplot2")) {
-  autoplot(res)
+if (requireNamespace("ggplot2")) {
+  ggplot2::autoplot(res)
 }
 
 ## Example check usage

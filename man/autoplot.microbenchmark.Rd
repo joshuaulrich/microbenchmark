@@ -25,14 +25,14 @@ A ggplot2 plot
 Uses ggplot2 to produce a more legible graph of microbenchmark timings
 }
 \examples{
-if (require("ggplot2")) {
+if (requireNamespace("ggplot2")) {
 
 tm <- microbenchmark(rchisq(100, 0),
                      rchisq(100, 1),
                      rchisq(100, 2),
                      rchisq(100, 3),
                      rchisq(100, 5), times=1000L)
-autoplot(tm)
+ggplot2::autoplot(tm)
 }
 }
 \author{
