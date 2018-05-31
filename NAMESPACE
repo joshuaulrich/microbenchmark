@@ -3,7 +3,6 @@
 S3method(boxplot,microbenchmark)
 S3method(print,microbenchmark)
 S3method(summary,microbenchmark)
-export(autoplot.microbenchmark)
 export(get_nanotime)
 export(microbenchmark)
 export(microtiming_precision)

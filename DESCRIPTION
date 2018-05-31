@@ -15,5 +15,5 @@ Imports: graphics, stats
 Suggests: ggplot2, multcomp
 ByteCompile: yes
 LazyData: yes
-Version: 1.4-4
+Version: 1.4-5
 RoxygenNote: 6.0.1

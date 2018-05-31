@@ -89,7 +89,7 @@
 #' boxplot(res)
 #'
 #' ## Pretty plot:
-#' if (require("ggplot2")) {
+#' if (requireNamespace("ggplot2")) {
 #'   autoplot(res)
 #' }
 #'

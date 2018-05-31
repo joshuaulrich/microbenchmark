@@ -12,7 +12,7 @@
 #'
 #' @export
 #' @examples
-#' if (require("ggplot2")) {
+#' if (requireNamespace("ggplot2")) {
 #'
 #' tm <- microbenchmark(rchisq(100, 0),
 #'                      rchisq(100, 1),
