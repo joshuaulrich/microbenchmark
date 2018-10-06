@@ -63,6 +63,7 @@
 #' @param check Function to check if the expressions are equal. By default \code{NULL} which omits the check.
 #' @param control List of control arguments. See Details.
 #' @param unit Default unit used in \code{summary} and \code{print}.
+#' @param setup An unevaluated expression to be run (untimed) before each benchmark expression.
 #'
 #' @return Object of class \sQuote{microbenchmark}, a data frame with
 #' columns \code{expr} and \code{time}. \code{expr} contains the

@@ -19,6 +19,8 @@ microbenchmark(..., list = NULL, times = 100L, unit, check = NULL,
 \item{check}{Function to check if the expressions are equal. By default \code{NULL} which omits the check.}
 
 \item{control}{List of control arguments. See Details.}
+
+\item{setup}{An unevaluated expression to be run (untimed) before each benchmark expression.}
 }
 \value{
 Object of class \sQuote{microbenchmark}, a data frame with
