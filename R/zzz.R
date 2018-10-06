@@ -25,7 +25,9 @@ function(pkg, generic, class, fun = NULL)
 }
 
 .onLoad <- function(libname, pkgname) {
-  register_s3_method("ggplot2", "autoplot", "microbenchmark")
+  if (getRversion() < "3.6.0") {
+    register_s3_method("ggplot2", "autoplot", "microbenchmark")
+  }
   invisible()
 }
 

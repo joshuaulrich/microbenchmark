@@ -3,6 +3,9 @@
 S3method(boxplot,microbenchmark)
 S3method(print,microbenchmark)
 S3method(summary,microbenchmark)
+if (getRversion() >= "3.6.0") {
+  S3method(ggplot2::autoplot, microbenchmark)
+}
 export(get_nanotime)
 export(microbenchmark)
 export(microtiming_precision)
