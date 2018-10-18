@@ -16,5 +16,5 @@ Suggests: ggplot2, multcomp
 SystemRequirements: On a Unix-alike, one of the C functions mach_absolute_time (macOS), clock_gettime or gethrtime. If none of these is found, the obsolescent POSIX function gettimeofday will be tried.
 ByteCompile: yes
 LazyData: yes
-Version: 1.4-5
+Version: 1.4-6
 RoxygenNote: 6.1.0
