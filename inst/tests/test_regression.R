@@ -47,8 +47,7 @@ test_setup_expression <- function()
 {
   set.seed(21)
   x <- rnorm(10)
-  y <- NULL
-  microbenchmark(y <<- rnorm(10), x, setup = set.seed(21))
+  microbenchmark(y <- rnorm(10), x, setup = set.seed(21))
   stopifnot(identical(x, y))
 }
 test_setup_expression()
@@ -81,8 +80,16 @@ test_setup_expression_eval_env_check()
 test_setup_expression_eval_env <- function()
 {
   x <- rnorm(10)
-  y <- NULL
-  microbenchmark(y <<- rnorm(n), x, setup = {n <- 10})
+  microbenchmark(y <- rnorm(n), x, setup = {n <- 10})
   stopifnot(length(y) == 10L)
 }
 test_setup_expression_eval_env()
+
+test_expression_eval_parent_frame <- function()
+{
+  fx <- function() { 1:10 }
+  fy <- function() { 1:10 }
+  microbenchmark(x <- fx(), y <- fy())
+  stopifnot(identical(x, y))
+}
+test_expression_eval_parent_frame()

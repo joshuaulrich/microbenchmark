@@ -144,7 +144,7 @@ microbenchmark <- function(..., list=NULL,
     nm[nm == ""] <- exprnm[nm == ""]
   names(exprs) <- nm
 
-  env <- new.env(parent = parent.frame())
+  env <- parent.frame()
   setup <- substitute(setup)
 
   if (!is.null(check)) {
