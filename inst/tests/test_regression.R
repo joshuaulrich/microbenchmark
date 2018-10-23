@@ -16,6 +16,13 @@ test_unit_f <- function()
 }
 test_unit_f()
 
+test_unit_int <- function()
+{
+  out <- try(print(microbenchmark(NULL, unit=4)), silent = TRUE)
+  stopifnot(!inherits(out, "try-error"))
+}
+test_unit_int()
+
 test_simple_timing <- function()
 {
   set.seed(21)

@@ -128,7 +128,7 @@ microbenchmark <- function(..., list=NULL,
                            setup=NULL) {
   stopifnot(times == as.integer(times))
   if (!missing(unit))
-    stopifnot(is.character("unit"), length(unit) == 1L)
+    stopifnot(is.character(unit), length(unit) == 1L)
 
   control[["warmup"]] <- coalesce(control[["warmup"]], 2^18L)
   control[["order"]] <- coalesce(control[["order"]], "random")
