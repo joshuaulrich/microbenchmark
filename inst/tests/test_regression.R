@@ -100,3 +100,48 @@ test_expression_eval_parent_frame <- function()
   stopifnot(identical(x, y))
 }
 test_expression_eval_parent_frame()
+
+test_setup_expression_check_equal <- function()
+{
+  set.seed(21)
+  x <- rnorm(1e5)
+  microbenchmark(rnorm(1e5), x, check = 'equal', setup = set.seed(21))
+}
+test_setup_expression_check_equal()
+
+test_setup_expression_check_equal_failure <- function()
+{
+  set.seed(21)
+  x <- rnorm(1e5)
+  attr(x = x, 'abc') <- 123 # add attribute
+  out <- try(microbenchmark(rnorm(1e5), x, check = 'equal', setup = set.seed(21)), silent = T)
+  stopifnot(inherits(out, "try-error"))
+}
+test_setup_expression_check_equal_failure()
+
+test_setup_expression_check_equivalent <- function()
+{
+  set.seed(21)
+  x <- rnorm(1e5)
+  attr(x = x, 'abc') <- 123 # add attribute
+  microbenchmark(rnorm(1e5), x, check = 'equivalent', setup = set.seed(21))
+}
+test_setup_expression_check_equivalent()
+
+test_setup_expression_check_identical <- function()
+{
+  set.seed(21)
+  x <- rnorm(1e5)
+  microbenchmark(rnorm(1e5), x, check = 'identical', setup = set.seed(21))
+}
+test_setup_expression_check_identical()
+
+test_setup_expression_check_identical_failure <- function()
+{
+  set.seed(21)
+  x <- rnorm(1e5)
+  attr(x = x, 'abc') <- 123 # add attribute
+  out <- try(microbenchmark(rnorm(1e5), x, check = 'equal', setup = set.seed(21)), silent = T)
+  stopifnot(inherits(out, "try-error"))
+}
+test_setup_expression_check_identical_failure()
