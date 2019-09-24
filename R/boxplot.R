@@ -8,10 +8,7 @@
 #' @param horizontal Switch X and Y axes.
 #' @param ... Passed on to boxplot.formula.
 #' 
-#' @export
 #' @method boxplot microbenchmark
-#'
-#' @importFrom graphics boxplot
 #' 
 #' @author Olaf Mersmann
 boxplot.microbenchmark <- function(x, unit="t", log=TRUE, xlab, ylab, 

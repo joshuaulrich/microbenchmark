@@ -10,7 +10,6 @@
 #'   the maximum value)
 #' @return A ggplot2 plot
 #'
-#' @export
 #' @examples
 #' if (requireNamespace("ggplot2")) {
 #'

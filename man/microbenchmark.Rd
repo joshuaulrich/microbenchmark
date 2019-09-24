@@ -16,7 +16,9 @@ microbenchmark(..., list = NULL, times = 100L, unit, check = NULL,
 
 \item{unit}{Default unit used in \code{summary} and \code{print}.}
 
-\item{check}{Function to check if the expressions are equal. By default \code{NULL} which omits the check.}
+\item{check}{A function to check if the expressions are equal. By default \code{NULL} which omits the check.
+In addition to a function, a string can be supplied.
+The string \sQuote{equal} will compare all values using \code{\link{all.equal}}, \sQuote{equivalent} will compare all values using \code{\link{all.equal}} and check.attributes = FALSE, and \sQuote{identical} will compare all values using \code{\link{identical}}.}
 
 \item{control}{List of control arguments. See Details.}
 
@@ -128,6 +130,16 @@ microbenchmark(x, rnorm(10), check=my_check, setup=set.seed(21))
 ## Will fail without setup
 \dontrun{
 microbenchmark(x, rnorm(10), check=my_check)
+}
+## using check
+a <- 2
+microbenchmark(2 + 2, 2 + a, sum(2, a), sum(2, 2), check='identical')
+microbenchmark(2 + 2, 2 + a, sum(2, a), sum(2, 2), check='equal')
+attr(a, 'abc') <- 123
+microbenchmark(2 + 2, 2 + a, sum(2, a), sum(2, 2), check='equivalent')
+## check='equal' will fail due to difference in attribute
+\dontrun{
+microbenchmark(2 + 2, 2 + a, sum(2, a), sum(2, 2), check='equal')
 }
 }
 \seealso{

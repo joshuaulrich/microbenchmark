@@ -5,9 +5,7 @@
 #' purposes. Please note that there is no common reference, that is,
 #' the timer value cannot be converted to a date and time value.
 #' 
-#' @useDynLib microbenchmark do_get_nanotime
 #' @author Olaf Mersmann
-#' @export
 get_nanotime <- function() {
   .Call(do_get_nanotime, PACKAGE="microbenchmark")
 }

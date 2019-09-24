@@ -1,6 +1,3 @@
-#' @useDynLib microbenchmark do_microtiming do_microtiming_precision
-{}
-
 #' Sub-millisecond accurate timing of expression evaluation.
 #'
 #' \code{microbenchmark} serves as a more accurate replacement of the
@@ -130,7 +127,6 @@
 #' \dontrun{
 #' microbenchmark(2 + 2, 2 + a, sum(2, a), sum(2, 2), check='equal')
 #' }
-#' @export
 #' @author Olaf Mersmann
 microbenchmark <- function(..., list=NULL,
                            times=100L,
