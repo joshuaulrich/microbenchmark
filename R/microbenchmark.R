@@ -55,8 +55,8 @@
 #' Please contact the package maintainer.
 #'
 #' @param ... Expressions to benchmark.
-#' @param list  List of unevaluated expression to benchmark.
-#' @param times Number of times to evaluate the expression.
+#' @param list  List of unevaluated expressions to benchmark.
+#' @param times Number of times to evaluate each expression.
 #' @param check A function to check if the expressions are equal. By default \code{NULL} which omits the check.
 #' In addition to a function, a string can be supplied.
 #' The string \sQuote{equal} will compare all values using \code{\link{all.equal}}, \sQuote{equivalent} will compare all values using \code{\link{all.equal}} and check.attributes = FALSE, and \sQuote{identical} will compare all values using \code{\link{identical}}.
