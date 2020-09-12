@@ -130,3 +130,70 @@ coalesce <- function(...) {
   isnotnull <- function(x) !is.null(x)
   Find(isnotnull, list(...))
 }
+
+#' Normalize timing units to one of the supported values
+#'
+#' We support the following units of time
+#' \describe{
+#'   \item{\dQuote{ns}, \dQuote{nanoseconds}}{}
+#'   \item{\dQuote{us}, \dQuote{microseconds}}{}
+#'   \item{\dQuote{ms}, \dQuote{milliseconds}}{}
+#'   \item{\dQuote{s}, \dQuote{secs}, \dQuote{seconds}}{}
+#'   \item{\dQuote{t}, \dQuote{time}}{Appropriately prefixed time unit.}
+#'   \item{\dQuote{eps}}{Evaluations per second / Hertz.}
+#'   \item{\dQuote{hz}}{Hertz / evaluations per second.}
+#'   \item{\dQuote{khz}}{Kilohertz / 1000s of evaluations per second.}
+#'   \item{\dQuote{mhz}}{Megahertz / 1000000s of evaluations per second.}
+#'   \item{\dQuote{f}, \dQuote{frequency}}{Appropriately prefixed frequency unit.}
+#' }
+#'
+#' @param unit A unit of time. See details.
+#'
+#' @return A matrix containing the converted time values with an
+#'   attribute \code{unit} which is a printable name of the unit of
+#'   time.
+#'
+#' @author Joshua M. Ulrich
+#'
+#' @keywords internal
+normalize_unit <- function(unit)
+{
+  values <- c("nanoseconds", "ns",
+              "microseconds", "us",
+              "milliseconds", "ms",
+              "seconds", "s", "secs",
+              "time", "t",
+              "frequency", "f",
+              "hz", "khz", "mhz",
+              "eps")
+
+  if (is.null(unit)) {
+    return(NULL)
+  }
+
+  unit <- tolower(unit)
+  unit <- match.arg(unit, values)
+
+  unit <-
+    switch(unit,
+           time = "t",
+           frequency = "f",
+           nanoseconds = ,
+           ns = "ns",
+           microseconds = ,
+           us = "us",
+           milliseconds = ,
+           ms = "ms",
+           seconds = ,
+           secs = ,
+           s = "s",
+           time = ,
+           t = "t",
+           frequency = ,
+           f = "f",
+           hz = "hz",
+           khz = "khz",
+           mhz = "mhz",
+           eps = "eps")
+  unit
+}

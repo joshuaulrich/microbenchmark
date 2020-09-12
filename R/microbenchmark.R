@@ -130,13 +130,15 @@
 #' @author Olaf Mersmann
 microbenchmark <- function(..., list=NULL,
                            times=100L,
-                           unit,
+                           unit=NULL,
                            check=NULL,
                            control=list(),
                            setup=NULL) {
   stopifnot(times == as.integer(times))
-  if (!missing(unit))
+  if (!missing(unit) && !is.null(unit))
     stopifnot(is.character(unit), length(unit) == 1L)
+
+  unit <- normalize_unit(unit)
 
   control[["warmup"]] <- coalesce(control[["warmup"]], 2^18L)
   control[["order"]] <- coalesce(control[["order"]], "random")
@@ -199,7 +201,7 @@ microbenchmark <- function(..., list=NULL,
 
   res <- data.frame(expr = factor(nm[o], levels = nm), time=res)
   class(res) <- c("microbenchmark", class(res))
-  if (!missing(unit))
+  if (!is.null(unit))
     attr(res, "unit") <- unit
   res
 }

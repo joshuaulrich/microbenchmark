@@ -18,6 +18,41 @@ test.unit_int <- function()
   checkTrue(inherits(out, "try-error"))
 }
 
+test.unit_arg_errors_before_printing <- function()
+{
+  out <- try(microbenchmark(NULL, unit="foo"), silent = TRUE)
+  checkTrue(inherits(out, "try-error"))
+}
+
+test.unit_arg_valid_values <- function()
+{
+  check <- function(x, u)
+  {
+    normu <- microbenchmark:::normalize_unit
+    checkIdentical(normu(u), attr(x, "unit"))
+  }
+
+  values <- c("nanoseconds", "ns",
+              "microseconds", "us",
+              "milliseconds", "ms",
+              "seconds", "s", "secs",
+              "time", "t",
+              "frequency", "f",
+              "hz", "khz", "mhz",
+              "eps")
+
+  for (u in values) {
+    out <- microbenchmark(NULL, unit = u, times = 1)
+    check(out, u)
+  }
+}
+
+test.unit_is_null_does_not_error <- function()
+{
+  out <- try(print(microbenchmark(NULL, unit = NULL)), silent = TRUE)
+  checkTrue(!inherits(out, "try-error"))
+}
+
 test.simple_timing <- function()
 {
   set.seed(21)
