@@ -1,24 +1,24 @@
 library(microbenchmark)
 
-test.unit_argument <- function()
+test.unit_is_object_errors <- function()
 {
   out <- try(microbenchmark(NULL, unit=a), silent = TRUE)
   checkTrue(inherits(out, "try-error"))
 }
 
-test.unit_f <- function()
+test.unit_f_is_valid <- function()
 {
-  out <- try(print(microbenchmark(NULL, unit="f")), silent = TRUE)
+  out <- try(microbenchmark(NULL, unit="f"), silent = TRUE)
   checkTrue(!inherits(out, "try-error"))
 }
 
-test.unit_int <- function()
+test.unit_is_int_errors <- function()
 {
-  out <- try(print(microbenchmark(NULL, unit=4)), silent = TRUE)
+  out <- try(microbenchmark(NULL, unit=4), silent = TRUE)
   checkTrue(inherits(out, "try-error"))
 }
 
-test.unit_arg_errors_before_printing <- function()
+kest.unit_arg_errors_before_printing <- function()
 {
   out <- try(microbenchmark(NULL, unit="foo"), silent = TRUE)
   checkTrue(inherits(out, "try-error"))
