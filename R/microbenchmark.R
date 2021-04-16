@@ -190,6 +190,7 @@ microbenchmark <- function(..., list=NULL,
     stop("Unknown ordering. Must be one of 'random', 'inorder' or 'block'.")
   exprs <- exprs[o]
 
+  expr <- factor(nm[o], levels = nm)
   res <- .Call(do_microtiming, exprs, env,
                as.integer(control$warmup), setup,
                PACKAGE="microbenchmark")
@@ -199,7 +200,7 @@ microbenchmark <- function(..., list=NULL,
   if (all(is.na(res)))
     .all_na_stop()
 
-  res <- data.frame(expr = factor(nm[o], levels = nm), time=res)
+  res <- data.frame(expr = expr, time=res)
   class(res) <- c("microbenchmark", class(res))
   if (!is.null(unit))
     attr(res, "unit") <- unit
