@@ -190,6 +190,11 @@ microbenchmark <- function(..., list=NULL,
     stop("Unknown ordering. Must be one of 'random', 'inorder' or 'block'.")
   exprs <- exprs[o]
 
+  if (anyDuplicated(nm) > 0) {
+    duplicates <- nm[duplicated(nm)]
+    stop("Expression names must be unique. Duplicate expression names: ",
+         paste(duplicates, collapse = ", "))
+  }
   expr <- factor(nm[o], levels = nm)
   res <- .Call(do_microtiming, exprs, env,
                as.integer(control$warmup), setup,
