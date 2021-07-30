@@ -162,3 +162,9 @@ test.setup_expression_check_identical_failure <- function()
   out <- try(microbenchmark(rnorm(1e5), x, check = 'equal', setup = set.seed(21)), silent = T)
   checkTrue(inherits(out, "try-error"))
 }
+
+test.print_returns_input <- function()
+{
+  x <- microbenchmark( 5 + 6, 6 + 7, times = 2)
+  identical(x, print(x))
+}

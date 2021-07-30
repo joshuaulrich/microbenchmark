@@ -52,4 +52,5 @@ print.microbenchmark <- function(x, unit, order, signif, ...) {
     }
   }
   print(s, ..., row.names=FALSE)
+  invisible(x)
 }
