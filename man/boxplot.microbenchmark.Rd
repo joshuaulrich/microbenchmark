@@ -4,8 +4,7 @@
 \alias{boxplot.microbenchmark}
 \title{Boxplot of \code{microbenchmark} timings.}
 \usage{
-\method{boxplot}{microbenchmark}(x, unit = "t", log = TRUE, xlab, ylab,
-  horizontal = FALSE, ...)
+\method{boxplot}{microbenchmark}(x, unit = "t", log = TRUE, xlab, ylab, horizontal = FALSE, ...)
 }
 \arguments{
 \item{x}{A \code{microbenchmark} object.}

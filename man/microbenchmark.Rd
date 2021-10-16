@@ -4,15 +4,22 @@
 \alias{microbenchmark}
 \title{Sub-millisecond accurate timing of expression evaluation.}
 \usage{
-microbenchmark(..., list = NULL, times = 100L, unit, check = NULL,
-  control = list(), setup = NULL)
+microbenchmark(
+  ...,
+  list = NULL,
+  times = 100L,
+  unit = NULL,
+  check = NULL,
+  control = list(),
+  setup = NULL
+)
 }
 \arguments{
 \item{...}{Expressions to benchmark.}
 
-\item{list}{List of unevaluated expression to benchmark.}
+\item{list}{List of unevaluated expressions to benchmark.}
 
-\item{times}{Number of times to evaluate the expression.}
+\item{times}{Number of times to evaluate each expression.}
 
 \item{unit}{Default unit used in \code{summary} and \code{print}.}
 
@@ -92,7 +99,7 @@ Please contact the package maintainer.
 }
 \examples{
 ## Measure the time it takes to dispatch a simple function call
-## compared to simply evaluating the constant \\code{NULL}
+## compared to simply evaluating the constant \code{NULL}
 f <- function() NULL
 res <- microbenchmark(NULL, f(), times=1000L)
 

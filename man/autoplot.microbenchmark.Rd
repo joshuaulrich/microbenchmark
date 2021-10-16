@@ -5,8 +5,12 @@
 \title{Autoplot method for microbenchmark objects: Prettier graphs for
 microbenchmark using ggplot2}
 \usage{
-autoplot.microbenchmark(object, ..., log = TRUE, y_max = 1.05 *
-  max(object$time))
+autoplot.microbenchmark(
+  object,
+  ...,
+  log = TRUE,
+  y_max = 1.05 * max(object$time)
+)
 }
 \arguments{
 \item{object}{A microbenchmark object}
@@ -32,7 +36,7 @@ tm <- microbenchmark(rchisq(100, 0),
                      rchisq(100, 2),
                      rchisq(100, 3),
                      rchisq(100, 5), times=1000L)
-ggplot2::autoplot(tm)
+autoplot(tm)
 }
 }
 \author{

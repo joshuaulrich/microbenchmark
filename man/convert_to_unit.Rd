@@ -4,8 +4,10 @@
 \alias{convert_to_unit}
 \title{Convert timings to different units.}
 \usage{
-convert_to_unit(x, unit = c("ns", "us", "ms", "s", "t", "hz", "khz", "mhz",
-  "eps", "f"))
+convert_to_unit(
+  x,
+  unit = c("ns", "us", "ms", "s", "t", "hz", "khz", "mhz", "eps", "f")
+)
 }
 \arguments{
 \item{x}{An \code{microbenchmark} object.}
