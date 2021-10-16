@@ -37,17 +37,15 @@ mb_cv_have_timer="no"
 ## mach_absolute_time (macOS)
 if test "${mb_cv_have_timer}" = "no"; then
   AC_MSG_CHECKING(for mach_absolute_time)
-  AC_TRY_COMPILE(
-  [
+  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
     #include <mach/mach_time.h>
-  ],[
+  ]], [[
     uint64_t time;
     mach_timebase_info_data_t info;
     time = mach_absolute_time();
     mach_timebase_info(&info);
     time * (info.numer / info.denom);
-  ],
-  mb_cv_have_timer="yes")
+  ]])],[mb_cv_have_timer="yes"],[])
   AC_MSG_RESULT(${mb_cv_have_timer})
   if test "${mb_cv_have_timer}" = "yes"; then
     AC_DEFINE_UNQUOTED([MB_HAVE_MACH_TIME], [1],
@@ -69,16 +67,12 @@ if test "${mb_cv_have_timer}" = "no"; then
     [
       for clockid in CLOCK_MONOTONIC_PRECISE CLOCK_MONOTONIC_RAW \
                      CLOCK_HIGHRES CLOCK_MONOTONIC; do
-        AC_TRY_LINK(
-        [
+        AC_LINK_IFELSE([AC_LANG_PROGRAM([[
           #include <time.h>
-        ],
-        [
+        ]], [[
           struct timespec ts;
           clock_gettime($clockid, &ts);
-        ],
-        mb_cv_clockid_t="${clockid}",
-        mb_cv_clockid_t="no")
+        ]])],[mb_cv_clockid_t="${clockid}"],[mb_cv_clockid_t="no"])
         test "${mb_cv_clockid_t}" = "no" || break
       done
     ])
@@ -103,20 +97,16 @@ fi
 
 # gethrtime
 if test "${mb_cv_have_timer}" = "no"; then
-  AC_TRY_COMPILE(
-  [
+  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
     #if defined(sun) || defined(__sun)
     #define __EXTENSIONS__
     #endif
 
     #include <sys/time.h>
     #include <time.h>
-  ],
-  [
+  ]], [[
     gethrtime();
-  ],
-  mb_cv_gethrtime="yes",
-  mb_cv_gethrtime="no")
+  ]])],[mb_cv_gethrtime="yes"],[mb_cv_gethrtime="no"])
 
   if test "${mb_cv_gethrtime}" = "yes"; then
     AC_DEFINE_UNQUOTED([MB_HAVE_GETHRTIME], [1],
@@ -129,16 +119,12 @@ fi
 if test "${mb_cv_have_timer}" = "no"; then
   AC_MSG_WARN(cannot find a high-resolution timer. Falling back to system \
               time, which is unreliable for benchmarks.)
-  AC_TRY_COMPILE(
-  [
+  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
     #include <sys/time.h>
-  ],
-  [
+  ]], [[
     struct timeval tv;
     gettimeofday(&tv, NULL);
-  ],
-  mb_cv_gettimeofday="yes",
-  mb_cv_gettimeofday="no")
+  ]])],[mb_cv_gettimeofday="yes"],[mb_cv_gettimeofday="no"])
 
   if test "${mb_cv_func_gettimeofday}" = "yes"; then
     AC_DEFINE_UNQUOTED([MB_HAVE_GETTIMEOFDAY], [1],
