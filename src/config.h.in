@@ -39,6 +39,9 @@
 /* Define to 1 if you have the `gethrtime` function. */
 #undef MB_HAVE_GETHRTIME
 
+/* Define to 1 if you have the `gettimeofday` function. */
+#undef MB_HAVE_GETTIMEOFDAY
+
 /* Define to 1 if you have the `mach_absolute_time` function. */
 #undef MB_HAVE_MACH_TIME
 

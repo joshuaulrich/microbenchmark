@@ -3566,7 +3566,44 @@ _ACEOF
   fi
 fi
 
-# TODO: add gettimeofday
+# gettimeofday
+if test "${mb_cv_have_timer}" = "no"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: cannot find a high-resolution timer. Falling back to system \
+              time" >&5
+$as_echo "$as_me: WARNING: cannot find a high-resolution timer. Falling back to system \
+              time" >&2;}
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+    #include <sys/time.h>
+
+int
+main ()
+{
+
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+  mb_cv_gettimeofday="yes"
+else
+  mb_cv_gettimeofday="no"
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+  if test "${mb_cv_func_gettimeofday}" = "yes"; then
+
+cat >>confdefs.h <<_ACEOF
+#define MB_HAVE_GETTIMEOFDAY 1
+_ACEOF
+
+    mb_cv_have_timer="yes"
+  fi
+fi
 
 # nothing
 if test "${mb_cv_have_timer}" = "no"; then
