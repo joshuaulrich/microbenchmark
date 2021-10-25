@@ -18,7 +18,7 @@
 #'                      rchisq(100, 2),
 #'                      rchisq(100, 3),
 #'                      rchisq(100, 5), times=1000L)
-#' autoplot(tm)
+#' ggplot2::autoplot(tm)
 #' }
 #' @author Ari Friedman, Olaf Mersmann
 autoplot.microbenchmark <- function(object, ...,
