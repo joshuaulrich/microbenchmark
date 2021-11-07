@@ -32,6 +32,8 @@ test.unit_arg_valid_values <- function()
     checkIdentical(normu(u), attr(x, "unit"))
   }
 
+  test <- function() {}
+
   values <- c("nanoseconds", "ns",
               "microseconds", "us",
               "milliseconds", "ms",
@@ -42,7 +44,7 @@ test.unit_arg_valid_values <- function()
               "eps")
 
   for (u in values) {
-    out <- microbenchmark(NULL, unit = u, times = 1)
+    out <- microbenchmark(test(), unit = u, times = 1)
     check(out, u)
   }
 }
