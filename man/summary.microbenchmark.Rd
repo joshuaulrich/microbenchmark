@@ -4,7 +4,7 @@
 \alias{summary.microbenchmark}
 \title{Summarize \code{microbenchmark} timings.}
 \usage{
-\method{summary}{microbenchmark}(object, unit, ...)
+\method{summary}{microbenchmark}(object, unit, ..., include_cld = TRUE)
 }
 \arguments{
 \item{object}{An object of class \code{microbenchmark}.}
@@ -15,6 +15,10 @@ either the \code{unit} attribute of \code{object} or the option
 \dQuote{t} is used.}
 
 \item{...}{Passed to \code{print.data.frame}}
+
+\item{include_cld}{Calculate \code{cld} using \code{multcomp::glht()}
+and add it to the output. Set to \code{FALSE} if the calculation takes
+too long.}
 }
 \value{
 A \code{data.frame} containing the aggregated results.

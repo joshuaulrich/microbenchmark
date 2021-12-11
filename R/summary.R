@@ -9,6 +9,10 @@
 #'
 #' @param ... Passed to \code{print.data.frame}
 #'
+#' @param include_cld Calculate \code{cld} using \code{multcomp::glht()}
+#' and add it to the output. Set to \code{FALSE} if the calculation takes
+#' too long.
+#'
 #' @note The available units are nanoseconds (\code{"ns"}),
 #' microseconds (\code{"us"}), milliseconds (\code{"ms"}), seconds
 #' (\code{"s"}) and evaluations per seconds (\code{"eps"}) and
@@ -19,7 +23,7 @@
 #'
 #' @seealso \code{\link{print.microbenchmark}}
 #' @method summary microbenchmark
-summary.microbenchmark <- function(object, unit, ...) {
+summary.microbenchmark <- function(object, unit, ..., include_cld = TRUE) {
   ## Choose unit if not given based on unit attribute of object or
   ## global option. Default to 't' if none is set.
   if (missing(unit)) {
@@ -48,16 +52,22 @@ summary.microbenchmark <- function(object, unit, ...) {
     attr(res, "unit") <- attr(object$time, "unit")
   }
 
-  if (requireNamespace("multcomp", quietly = TRUE)
+  if (isTRUE(include_cld) && requireNamespace("multcomp", quietly = TRUE)
       && nrow(res) > 1 && all(res["neval"] > 1)) {
     ## Try to calculate a statistically meaningful comparison. If it fails for
     ## any reason (f.e. the data might be constant), ignore the error.
-    tryCatch({
-      ops <- options(warn=-1)
-      mdl <- lm(time ~ expr, object)
-      comp <- multcomp::glht(mdl, multcomp::mcp(expr = "Tukey"))
-      res$cld <- multcomp::cld(comp)$mcletters$monospacedLetters
-    }, error=function(e) FALSE, finally=options(ops))
+    cld_time <- system.time({
+      tryCatch({
+        ops <- options(warn=-1)
+        mdl <- lm(time ~ expr, object)
+        comp <- multcomp::glht(mdl, multcomp::mcp(expr = "Tukey"))
+        res$cld <- multcomp::cld(comp)$mcletters$monospacedLetters
+      }, error=function(e) FALSE, finally=options(ops))
+    })
+    if (cld_time["elapsed"] > 5.0) {
+      message("cld calculation took more than 5 seconds\n  set",
+              " include_cld = FALSE to skip the cld calculation")
+    }
   }
   res
 }
