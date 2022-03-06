@@ -41,7 +41,7 @@ test.unit_arg_valid_values <- function()
               "time", "t",
               "frequency", "f",
               "hz", "khz", "mhz",
-              "eps")
+              "eps", "relative")
 
   for (u in values) {
     out <- microbenchmark(test(), unit = u, times = 1)

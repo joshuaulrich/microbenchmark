@@ -165,7 +165,7 @@ normalize_unit <- function(unit)
               "time", "t",
               "frequency", "f",
               "hz", "khz", "mhz",
-              "eps")
+              "eps", "relative")
 
   if (is.null(unit)) {
     return(NULL)
@@ -176,8 +176,6 @@ normalize_unit <- function(unit)
 
   unit <-
     switch(unit,
-           time = "t",
-           frequency = "f",
            nanoseconds = ,
            ns = "ns",
            microseconds = ,
@@ -194,6 +192,7 @@ normalize_unit <- function(unit)
            hz = "hz",
            khz = "khz",
            mhz = "mhz",
-           eps = "eps")
+           eps = "eps",
+           relative = "relative")
   unit
 }

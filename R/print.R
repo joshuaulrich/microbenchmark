@@ -38,6 +38,9 @@
 #' @method print microbenchmark
 #' @author Olaf Mersmann
 print.microbenchmark <- function(x, unit, order, signif, ...) {
+  if (!missing(unit)) {
+    unit <- normalize_unit(unit)
+  }
   s <- summary(x, unit=unit)
   timing_cols <- c("min", "lq", "median", "uq", "max", "mean")
   if (!missing(signif)) {

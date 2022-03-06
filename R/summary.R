@@ -31,6 +31,8 @@ summary.microbenchmark <- function(object, unit, ..., include_cld = TRUE) {
       attr(object, "unit")
     else
       getOption("microbenchmark.unit", "t")
+  } else {
+    unit <- normalize_unit(unit)
   }
   if (unit != "relative")
     object$time <- convert_to_unit(object$time, unit)
