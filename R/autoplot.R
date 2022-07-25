@@ -23,21 +23,24 @@
 #' @author Ari Friedman, Olaf Mersmann
 autoplot.microbenchmark <- function(object, ...,
                                     log=TRUE,
-                                    y_max=1.05 * max(object$time)) {
+                                    y_max=NULL) {
   if (!requireNamespace("ggplot2"))
     stop("Missing package 'ggplot2'.")
   y_min <- 0
   object$ntime <- convert_to_unit(object$time, "t")
+  if (is.null(y_max)) {
+    y_max <- max(object$ntime)
+  }
   plt <- ggplot2::ggplot(object, ggplot2::aes_string(x="expr", y="ntime"))
-  plt <- plt + ggplot2::coord_cartesian(ylim=c(y_min , y_max))
   plt <- plt + ggplot2::stat_ydensity()
   plt <- plt + ggplot2::scale_x_discrete(name="")
   y_label <- sprintf("Time [%s]", attr(object$ntime, "unit"))
-  plt <- if (log) {
-    plt + ggplot2::scale_y_log10(name=y_label)
+  if (log) {
+    y_min <- min(object$ntime)
+    plt <- plt + ggplot2::scale_y_log10(name=y_label)
   } else {
-    plt + ggplot2::scale_y_continuous(name=y_label)
+    plt <- plt + ggplot2::scale_y_continuous(name=y_label)
   }
-  plt <- plt + ggplot2::coord_flip()
+  plt <- plt + ggplot2::coord_flip(ylim=c(y_min , y_max))
   plt
 }
