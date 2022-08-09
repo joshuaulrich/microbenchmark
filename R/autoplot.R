@@ -6,8 +6,8 @@
 #' @param object A microbenchmark object
 #' @param \dots Ignored
 #' @param log If \code{TRUE} the time axis will be on log scale.
-#' @param y_max The upper limit of the y axis (defaults to 5 percent more than
-#'   the maximum value)
+#' @param y_max The upper limit of the y axis, in the unit automatically
+#'   chosen for the time axis (defaults to the maximum value)
 #' @return A ggplot2 plot
 #'
 #' @examples
