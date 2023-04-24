@@ -5,12 +5,7 @@
 \title{Autoplot method for microbenchmark objects: Prettier graphs for
 microbenchmark using ggplot2}
 \usage{
-autoplot.microbenchmark(
-  object,
-  ...,
-  log = TRUE,
-  y_max = 1.05 * max(object$time)
-)
+autoplot.microbenchmark(object, ..., log = TRUE, y_max = NULL)
 }
 \arguments{
 \item{object}{A microbenchmark object}
@@ -19,8 +14,8 @@ autoplot.microbenchmark(
 
 \item{log}{If \code{TRUE} the time axis will be on log scale.}
 
-\item{y_max}{The upper limit of the y axis (defaults to 5 percent more than
-the maximum value)}
+\item{y_max}{The upper limit of the y axis, in the unit automatically
+chosen for the time axis (defaults to the maximum value)}
 }
 \value{
 A ggplot2 plot

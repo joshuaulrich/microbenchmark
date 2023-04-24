@@ -15,5 +15,5 @@ Imports: graphics, stats
 Suggests: ggplot2, multcomp, RUnit
 SystemRequirements: On a Unix-alike, one of the C functions mach_absolute_time (macOS), clock_gettime or gethrtime. If none of these is found, the obsolescent POSIX function gettimeofday will be tried.
 ByteCompile: yes
-Version: 1.4.9
-RoxygenNote: 7.1.2
+Version: 1.4.10
+RoxygenNote: 7.2.3
