@@ -4,7 +4,7 @@
 #include <R_ext/Rdynload.h>
 
 /* .Call calls */
-extern SEXP do_get_nanotime();
+extern SEXP do_get_nanotime(void);
 extern SEXP do_microtiming(SEXP, SEXP, SEXP, SEXP);
 extern SEXP do_microtiming_precision(SEXP, SEXP, SEXP);
 

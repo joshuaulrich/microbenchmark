@@ -8,6 +8,6 @@
  * want the compiler to include the call to include the overhead in our 
  * overhead estimation.
  */
-int do_nothing() {
+int do_nothing(void) {
   return 42;
 }
