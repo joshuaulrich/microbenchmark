@@ -38,12 +38,19 @@ boxplot.microbenchmark <- function(x, unit="t", log=TRUE, xlab, ylab,
         unit
     }
   }
+
+  if (log) {
+    # min time cannot be 0 for log y-axis
+    ylim <- pmax(1, range(x$time))
+  } else {
+    ylim <- NULL
+  }
   if (horizontal) { 
     ll <- if (log) "x" else ""
-    boxplot(time ~ expr, data=x, xlab=ylab, ylab=xlab, log=ll, 
+    boxplot(time ~ expr, data=x, xlab=ylab, ylab=xlab, log=ll, ylim=ylim,
             horizontal=TRUE, ...)
   } else {
     ll <- if (log) "y" else ""
-    boxplot(time ~ expr, data=x, xlab=xlab, ylab=ylab, log=ll, ...)
+    boxplot(time ~ expr, data=x, xlab=xlab, ylab=ylab, log=ll, ylim=ylim, ...)
   }
 }
