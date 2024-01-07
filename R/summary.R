@@ -7,7 +7,7 @@
 #' \code{microbenchmark.unit} is used and if neither is set
 #' \dQuote{t} is used.
 #'
-#' @param ... Passed to \code{print.data.frame}
+#' @param ... Ignored
 #'
 #' @param include_cld Calculate \code{cld} using \code{multcomp::glht()}
 #' and add it to the output. Set to \code{FALSE} if the calculation takes
