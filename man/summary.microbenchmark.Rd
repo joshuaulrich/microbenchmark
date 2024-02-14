@@ -14,7 +14,7 @@ either the \code{unit} attribute of \code{object} or the option
 \code{microbenchmark.unit} is used and if neither is set
 \dQuote{t} is used.}
 
-\item{...}{Passed to \code{print.data.frame}}
+\item{...}{Ignored}
 
 \item{include_cld}{Calculate \code{cld} using \code{multcomp::glht()}
 and add it to the output. Set to \code{FALSE} if the calculation takes
