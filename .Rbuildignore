@@ -4,16 +4,25 @@
 ^.dict.rds
 ^.*\.cache$
 
+^.*\.Rcheck$
+^.*\.tar.gz$
+^.*\.patch$
+^.*\.notes$
+
 ^src/.*\.o
 ^src/.*\.so
 
 ^.*\.Rproj$
 ^\.Rproj\.user$
-
-\.git
-\.gitignore
-\.orig$
+^\.git
+^\.gitignore
+^.*\.orig$
+\.md$
+\.Rmd$
+^release-checklist.md$
 
 README.md
 
 .travis.yml
+Makefile
+^\.sw*$
