@@ -6,8 +6,3 @@ PKG_LIBS = @MB_LIBS@
 ## set.
 ##
 PKG_CPPFLAGS = -D_POSIX_C_SOURCE=200112L @DEFS@
-
-UNAME := $(shell uname)
-ifeq ($(UNAME), FreeBSD)
-PKG_CPPFLAGS += -D__BSD_VISIBLE=1
-endif
