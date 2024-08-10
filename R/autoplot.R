@@ -1,15 +1,15 @@
 #' Autoplot method for microbenchmark objects: Prettier graphs for
 #' microbenchmark using ggplot2
 #'
-#' Uses ggplot2 to produce a more legible graph of microbenchmark timings
+#' Uses ggplot2 to produce a more legible graph of microbenchmark timings.
 #'
-#' @param object A microbenchmark object
-#' @param \dots Ignored
+#' @param object A microbenchmark object.
+#' @param \dots Ignored.
 #' @param order Name of output column to order the results.
 #' @param log If \code{TRUE} the time axis will be on log scale.
 #' @param y_max The upper limit of the y axis, in the unit automatically
-#'   chosen for the time axis (defaults to the maximum value)
-#' @return A ggplot2 plot
+#'   chosen for the time axis (defaults to the maximum value).
+#' @return A ggplot2 object.
 #'
 #' @examples
 #' if (requireNamespace("ggplot2", quietly = TRUE)) {
