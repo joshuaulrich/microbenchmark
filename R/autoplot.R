@@ -12,21 +12,20 @@
 #' @return A ggplot2 plot
 #'
 #' @examples
-#' if (requireNamespace("ggplot2")) {
-#'
-#' tm <- microbenchmark(rchisq(100, 0),
-#'                      rchisq(100, 1),
-#'                      rchisq(100, 2),
-#'                      rchisq(100, 3),
-#'                      rchisq(100, 5), times=1000L)
-#' ggplot2::autoplot(tm)
+#' if (requireNamespace("ggplot2", quietly = TRUE)) {
+#'     tm <- microbenchmark(rchisq(100, 0),
+#'                          rchisq(100, 1),
+#'                          rchisq(100, 2),
+#'                          rchisq(100, 3),
+#'                          rchisq(100, 5), times=1000L)
+#'     ggplot2::autoplot(tm)
 #' }
 #' @author Ari Friedman, Olaf Mersmann
 autoplot.microbenchmark <- function(object, ...,
                                     order=NULL,
                                     log=TRUE,
                                     y_max=NULL) {
-  if (!requireNamespace("ggplot2"))
+  if (!requireNamespace("ggplot2", quietly = TRUE))
     stop("Missing package 'ggplot2'.")
   y_min <- 0
   object$ntime <- convert_to_unit(object$time, "t")
