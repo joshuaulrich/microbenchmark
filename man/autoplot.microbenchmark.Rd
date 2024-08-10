@@ -12,7 +12,7 @@ autoplot.microbenchmark(object, ..., order = NULL, log = TRUE, y_max = NULL)
 
 \item{\dots}{Ignored.}
 
-\item{order}{Names of output column to order the results.}
+\item{order}{Names of output column(s) to order the results.}
 
 \item{log}{If \code{TRUE} the time axis will be on log scale.}
 
