@@ -5,6 +5,7 @@
 #'
 #' @param object A microbenchmark object
 #' @param \dots Ignored
+#' @param order Name of output column to order the results.
 #' @param log If \code{TRUE} the time axis will be on log scale.
 #' @param y_max The upper limit of the y axis, in the unit automatically
 #'   chosen for the time axis (defaults to the maximum value)
@@ -22,6 +23,7 @@
 #' }
 #' @author Ari Friedman, Olaf Mersmann
 autoplot.microbenchmark <- function(object, ...,
+                                    order=NULL,
                                     log=TRUE,
                                     y_max=NULL) {
   if (!requireNamespace("ggplot2"))
@@ -30,6 +32,12 @@ autoplot.microbenchmark <- function(object, ...,
   object$ntime <- convert_to_unit(object$time, "t")
   if (is.null(y_max)) {
     y_max <- max(object$ntime)
+  }
+  if (!is.null(order)) {
+    s <- summary(object)
+    object_colnames <- colnames(s)
+    order <- match.arg(order, object_colnames)
+    object$expr <- factor(object$expr, levels = levels(object$expr)[order(s[[order]])])
   }
   plt <- ggplot2::ggplot(object, ggplot2::aes_string(x="expr", y="ntime"))
   plt <- plt + ggplot2::stat_ydensity()
