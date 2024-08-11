@@ -11,9 +11,9 @@ Authors@R: c(person("Olaf", "Mersmann", role=c("aut")),
 URL: https://github.com/joshuaulrich/microbenchmark/
 BugReports: https://github.com/joshuaulrich/microbenchmark/issues/
 License: BSD_2_clause + file LICENSE
+Depends: R (>= 3.2.0)
 Imports: graphics, stats
 Suggests: ggplot2, multcomp, RUnit
 SystemRequirements: On a Unix-alike, one of the C functions mach_absolute_time (macOS), clock_gettime or gethrtime. If none of these is found, the obsolescent POSIX function gettimeofday will be tried.
 ByteCompile: yes
 Version: 1.4.10
-RoxygenNote: 7.2.3
