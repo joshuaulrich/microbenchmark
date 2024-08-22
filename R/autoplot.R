@@ -7,6 +7,7 @@
 #' @param \dots Ignored.
 #' @param order Names of output column(s) to order the results.
 #' @param log If \code{TRUE} the time axis will be on log scale.
+#' @param unit The unit to use for graph labels.
 #' @param y_max The upper limit of the y axis, in the unit automatically
 #'   chosen for the time axis (defaults to the maximum value).
 #' @return A ggplot2 object.
@@ -24,11 +25,17 @@
 autoplot.microbenchmark <- function(object, ...,
                                     order=NULL,
                                     log=TRUE,
+                                    unit=NULL,
                                     y_max=NULL) {
   if (!requireNamespace("ggplot2", quietly = TRUE))
     stop("Missing package 'ggplot2'.")
   y_min <- 0
-  object$ntime <- convert_to_unit(object$time, "t")
+  object_unit <- attr(object, "unit")
+  if (!is.null(object_unit) && is.null(unit)) {
+      unit <- object_unit
+  }
+  unit <- normalize_unit(unit)
+  object$ntime <- convert_to_unit(object$time, unit)
   if (is.null(y_max)) {
     y_max <- max(object$ntime)
   }

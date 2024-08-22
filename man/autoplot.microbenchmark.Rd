@@ -5,7 +5,14 @@
 \title{Autoplot method for microbenchmark objects: Prettier graphs for
 microbenchmark using ggplot2}
 \usage{
-autoplot.microbenchmark(object, ..., order = NULL, log = TRUE, y_max = NULL)
+autoplot.microbenchmark(
+  object,
+  ...,
+  order = NULL,
+  log = TRUE,
+  unit = NULL,
+  y_max = NULL
+)
 }
 \arguments{
 \item{object}{A microbenchmark object.}
@@ -15,6 +22,8 @@ autoplot.microbenchmark(object, ..., order = NULL, log = TRUE, y_max = NULL)
 \item{order}{Names of output column(s) to order the results.}
 
 \item{log}{If \code{TRUE} the time axis will be on log scale.}
+
+\item{unit}{The unit to use for graph labels.}
 
 \item{y_max}{The upper limit of the y axis, in the unit automatically
 chosen for the time axis (defaults to the maximum value).}
