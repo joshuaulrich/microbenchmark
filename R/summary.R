@@ -32,7 +32,7 @@ summary.microbenchmark <- function(object, unit, ..., include_cld = TRUE) {
   unit <- determine_unit(object, unit)
 
   if (unit != "relative")
-    object$time <- convert_to_unit(object$time, unit)
+    object$time <- convert_to_unit(object, unit)
 
   res <- aggregate(time ~ expr, object,
                    function(z) {

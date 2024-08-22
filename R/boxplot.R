@@ -13,7 +13,7 @@
 #' @author Olaf Mersmann
 boxplot.microbenchmark <- function(x, unit="t", log=TRUE, xlab, ylab, 
                                    horizontal=FALSE, ...) {
-  x$time <- convert_to_unit(x$time, unit)
+  x$time <- convert_to_unit(x, unit)
   timeunits <- c("ns", "us", "ms", "s", "t")
   frequnits <- c("hz", "khz", "mhz", "eps", "f")
 

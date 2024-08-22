@@ -47,7 +47,7 @@ resolve the issue with you."
 #' \item{\dQuote{f}}{Appropriately prefixed frequency unit.}
 #' }
 #' 
-#' @param x An \code{microbenchmark} object.
+#' @param object A \code{microbenchmark} object.
 #' @param unit A unit of time. See details.
 #'
 #' @return A matrix containing the converted time values with an
@@ -57,10 +57,10 @@ resolve the issue with you."
 #' @author Olaf Mersmann
 #'
 #' @keywords internal
-convert_to_unit <- function(x,
-                            unit=c("ns", "us", "ms", "s", "t",
-                                   "hz", "khz", "mhz", "eps", "f")) {
-  unit <- match.arg(unit)
+convert_to_unit <- function(object, unit)
+{
+  unit <- determine_unit(object, unit)
+  x <- object$time
 
   switch (unit,
           t=unit <- sprintf ("%ss", find_prefix(x * 1e-9,

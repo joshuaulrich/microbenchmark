@@ -32,7 +32,7 @@ autoplot.microbenchmark <- function(object, ...,
   y_min <- 0
 
   unit <- determine_unit(object, unit)
-  object$ntime <- convert_to_unit(object$time, unit)
+  object$ntime <- convert_to_unit(object, unit)
   if (is.null(y_max)) {
     y_max <- max(object$ntime)
   }
