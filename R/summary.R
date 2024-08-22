@@ -27,13 +27,10 @@ summary.microbenchmark <- function(object, unit, ..., include_cld = TRUE) {
   ## Choose unit if not given based on unit attribute of object or
   ## global option. Default to 't' if none is set.
   if (missing(unit)) {
-    unit <- if (!is.null(attr(object, "unit")))
-      attr(object, "unit")
-    else
-      getOption("microbenchmark.unit", "t")
-  } else {
-    unit <- normalize_unit(unit)
+    unit <- NULL
   }
+  unit <- determine_unit(object, unit)
+
   if (unit != "relative")
     object$time <- convert_to_unit(object$time, unit)
 

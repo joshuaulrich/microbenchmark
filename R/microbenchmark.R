@@ -138,7 +138,7 @@ microbenchmark <- function(..., list=NULL,
   if (!missing(unit) && !is.null(unit))
     stopifnot(is.character(unit), length(unit) == 1L)
 
-  unit <- normalize_unit(unit)
+  unit <- determine_unit(unit = unit)
 
   control[["warmup"]] <- coalesce(control[["warmup"]], 2^18L)
   control[["order"]] <- coalesce(control[["order"]], "random")

@@ -30,11 +30,8 @@ autoplot.microbenchmark <- function(object, ...,
   if (!requireNamespace("ggplot2", quietly = TRUE))
     stop("Missing package 'ggplot2'.")
   y_min <- 0
-  object_unit <- attr(object, "unit")
-  if (!is.null(object_unit) && is.null(unit)) {
-      unit <- object_unit
-  }
-  unit <- normalize_unit(unit)
+
+  unit <- determine_unit(object, unit)
   object$ntime <- convert_to_unit(object$time, unit)
   if (is.null(y_max)) {
     y_max <- max(object$ntime)

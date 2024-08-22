@@ -147,6 +147,7 @@ coalesce <- function(...) {
 #'   \item{\dQuote{f}, \dQuote{frequency}}{Appropriately prefixed frequency unit.}
 #' }
 #'
+#' @param object A 'microbenchmark' object.
 #' @param unit A unit of time. See details.
 #'
 #' @return A matrix containing the converted time values with an
@@ -156,19 +157,34 @@ coalesce <- function(...) {
 #' @author Joshua M. Ulrich
 #'
 #' @keywords internal
-normalize_unit <- function(unit)
+determine_unit <-
+function(object = NULL,
+         unit = NULL)
 {
+  # all supported unit values
   values <- c("nanoseconds", "ns",
               "microseconds", "us",
               "milliseconds", "ms",
-              "seconds", "s", "secs",
-              "time", "t",
-              "frequency", "f",
+              "seconds",
+              "time", "auto",
+              "frequency",
               "hz", "khz", "mhz",
               "eps", "relative")
 
+  # Order of precedence:
+  # 1) 'unit' argument
+  # 2) 'unit' attribute on 'object' argument
+  # 3) 'microbenchmark.unit' option
+  object_unit <- attr(object, "unit")
   if (is.null(unit)) {
-    return(NULL)
+    if (is.null(object_unit)) {
+        unit <- getOption("microbenchmark.unit", "auto")
+    } else {
+        unit <- object_unit
+    }
+  } else {
+    # include support for 'secs' because it doesn't match 'seconds'
+    unit <- if (unit == "secs") "seconds" else unit
   }
 
   unit <- tolower(unit)
@@ -182,13 +198,10 @@ normalize_unit <- function(unit)
            us = "us",
            milliseconds = ,
            ms = "ms",
-           seconds = ,
-           secs = ,
-           s = "s",
-           time = ,
-           t = "t",
-           frequency = ,
-           f = "f",
+           seconds = "s",
+           auto = ,
+           time = "t",
+           frequency = "f",
            hz = "hz",
            khz = "khz",
            mhz = "mhz",
