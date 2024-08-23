@@ -42,6 +42,9 @@ if (requireNamespace("ggplot2", quietly = TRUE)) {
                          rchisq(100, 3),
                          rchisq(100, 5), times=1000L)
     ggplot2::autoplot(tm)
+
+    # add a custom title
+    ggplot2::autoplot(tm) + ggtitle("my timings")
 }
 }
 \author{

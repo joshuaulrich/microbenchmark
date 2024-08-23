@@ -4,7 +4,16 @@
 \alias{boxplot.microbenchmark}
 \title{Boxplot of \code{microbenchmark} timings.}
 \usage{
-\method{boxplot}{microbenchmark}(x, unit = "t", log = TRUE, xlab, ylab, horizontal = FALSE, ...)
+\method{boxplot}{microbenchmark}(
+  x,
+  unit = "t",
+  log = TRUE,
+  xlab,
+  ylab,
+  horizontal = FALSE,
+  main = "microbenchmark timings",
+  ...
+)
 }
 \arguments{
 \item{x}{A \code{microbenchmark} object.}
@@ -18,6 +27,8 @@
 \item{ylab}{Y axis label.}
 
 \item{horizontal}{Switch X and Y axes.}
+
+\item{main}{Plot title.}
 
 \item{...}{Passed on to boxplot.formula.}
 }
