@@ -20,6 +20,9 @@
 #'                          rchisq(100, 3),
 #'                          rchisq(100, 5), times=1000L)
 #'     ggplot2::autoplot(tm)
+#'
+#'     # add a custom title
+#'     ggplot2::autoplot(tm) + ggtitle("my timings")
 #' }
 #' @author Ari Friedman, Olaf Mersmann
 autoplot.microbenchmark <- function(object, ...,
@@ -46,7 +49,11 @@ autoplot.microbenchmark <- function(object, ...,
   plt <- ggplot2::ggplot(object, ggplot2::aes_string(x="expr", y="ntime"))
   plt <- plt + ggplot2::stat_ydensity()
   plt <- plt + ggplot2::scale_x_discrete(name="")
-  y_label <- sprintf("Time [%s]", attr(object$ntime, "unit"))
+
+  y_label <- sprintf("Time (%s) for neval = %d",
+                     attr(object$ntime, "unit"),
+                     nrow(object) / length(levels(object$expr)))
+
   if (log) {
     y_min <- if (min(object$time) == 0) 1 else min(object$ntime)
     plt <- plt + ggplot2::scale_y_log10(name=y_label)
@@ -54,5 +61,6 @@ autoplot.microbenchmark <- function(object, ...,
     plt <- plt + ggplot2::scale_y_continuous(name=y_label)
   }
   plt <- plt + ggplot2::coord_flip(ylim=c(y_min , y_max))
+  plt <- plt + ggplot2::ggtitle("microbenchmark timings")
   plt
 }
