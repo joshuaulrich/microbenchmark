@@ -6,13 +6,14 @@
 #' @param xlab X axis label.
 #' @param ylab Y axis label.
 #' @param horizontal Switch X and Y axes.
+#' @param main Plot title.
 #' @param ... Passed on to boxplot.formula.
 #' 
 #' @method boxplot microbenchmark
 #' 
 #' @author Olaf Mersmann
 boxplot.microbenchmark <- function(x, unit="t", log=TRUE, xlab, ylab, 
-                                   horizontal=FALSE, ...) {
+                                   horizontal=FALSE, main="microbenchmark timings", ...) {
   x$time <- convert_to_unit(x, unit)
   timeunits <- c("ns", "us", "ms", "s", "t")
   frequnits <- c("hz", "khz", "mhz", "eps", "f")
@@ -48,9 +49,9 @@ boxplot.microbenchmark <- function(x, unit="t", log=TRUE, xlab, ylab,
   if (horizontal) { 
     ll <- if (log) "x" else ""
     boxplot(time ~ expr, data=x, xlab=ylab, ylab=xlab, log=ll, ylim=ylim,
-            horizontal=TRUE, ...)
+            horizontal=TRUE, main=main, ...)
   } else {
     ll <- if (log) "y" else ""
-    boxplot(time ~ expr, data=x, xlab=xlab, ylab=ylab, log=ll, ylim=ylim, ...)
+    boxplot(time ~ expr, data=x, xlab=xlab, ylab=ylab, log=ll, ylim=ylim, main=main, ...)
   }
 }
