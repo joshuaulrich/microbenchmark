@@ -81,8 +81,7 @@ if test "${mb_cv_have_timer}" = "no"; then
   fi
 
   if test "${mb_cv_clockid_t}" = "no"; then
-    AC_MSG_WARN(cannot find a monotonic clockid_t to use with clock_gettime; \
-                an alternative clock will be used)
+    AC_MSG_WARN(cannot find a monotonic clockid_t to use with clock_gettime; an alternative clock will be used)
   else
     AC_DEFINE([MB_HAVE_CLOCK_GETTIME], [1],
       [Define to 1 if you have the `clock_gettime` function.])
@@ -121,8 +120,7 @@ fi
 
 # gettimeofday
 if test "${mb_cv_have_timer}" = "no"; then
-  AC_MSG_WARN(cannot find a high-resolution timer. Falling back to system \
-              time, which is unreliable for benchmarks.)
+  AC_MSG_WARN(cannot find a high-resolution timer. Falling back to system time, which is unreliable for benchmarks.)
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
     #include <sys/time.h>
   ]], [[

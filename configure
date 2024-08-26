@@ -3540,10 +3540,8 @@ printf "%s\n" "$mb_cv_clockid_t" >&6; }
   fi
 
   if test "${mb_cv_clockid_t}" = "no"; then
-    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: cannot find a monotonic clockid_t to use with clock_gettime; \
-                an alternative clock will be used" >&5
-printf "%s\n" "$as_me: WARNING: cannot find a monotonic clockid_t to use with clock_gettime; \
-                an alternative clock will be used" >&2;}
+    { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: cannot find a monotonic clockid_t to use with clock_gettime; an alternative clock will be used" >&5
+printf "%s\n" "$as_me: WARNING: cannot find a monotonic clockid_t to use with clock_gettime; an alternative clock will be used" >&2;}
   else
 
 printf "%s\n" "#define MB_HAVE_CLOCK_GETTIME 1" >>confdefs.h
@@ -3605,10 +3603,8 @@ fi
 
 # gettimeofday
 if test "${mb_cv_have_timer}" = "no"; then
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: cannot find a high-resolution timer. Falling back to system \
-              time" >&5
-printf "%s\n" "$as_me: WARNING: cannot find a high-resolution timer. Falling back to system \
-              time" >&2;}
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: cannot find a high-resolution timer. Falling back to system time" >&5
+printf "%s\n" "$as_me: WARNING: cannot find a high-resolution timer. Falling back to system time" >&2;}
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
