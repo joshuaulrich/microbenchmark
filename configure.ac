@@ -78,23 +78,23 @@ if test "${mb_cv_have_timer}" = "no"; then
     ])
 
     LIBS="${libs}"
-  fi
 
-  if test "${mb_cv_clockid_t}" = "no"; then
-    AC_MSG_WARN(cannot find a monotonic clockid_t to use with clock_gettime; an alternative clock will be used)
-  else
-    AC_DEFINE([MB_HAVE_CLOCK_GETTIME], [1],
-      [Define to 1 if you have the `clock_gettime` function.])
-    AC_DEFINE_UNQUOTED([MB_CLOCKID_T], [$mb_cv_clockid_t],
-      [clockid_t to use with clock_gettime])
-    if test "${mb_cv_clockid_t}" = "CLOCK_MONOTONIC_PRECISE"; then
-        # CLOCK_MONOTONIC_PRECISE is FreeBSD-specific that requires __BSD_VISIBLE to use
-        AC_DEFINE([__BSD_VISIBLE], [1], [Enable FreeBSD-specific clockid])
+    if test "${mb_cv_clockid_t}" = "no"; then
+      AC_MSG_WARN(cannot find a monotonic clockid_t to use with clock_gettime; an alternative clock will be used)
+    else
+      AC_DEFINE([MB_HAVE_CLOCK_GETTIME], [1],
+        [Define to 1 if you have the `clock_gettime` function.])
+      AC_DEFINE_UNQUOTED([MB_CLOCKID_T], [$mb_cv_clockid_t],
+        [clockid_t to use with clock_gettime])
+      if test "${mb_cv_clockid_t}" = "CLOCK_MONOTONIC_PRECISE"; then
+          # CLOCK_MONOTONIC_PRECISE is FreeBSD-specific that requires __BSD_VISIBLE to use
+          AC_DEFINE([__BSD_VISIBLE], [1], [Enable FreeBSD-specific clockid])
+      fi
+      if test "${ac_cv_search_clock_gettime}" != "none required"; then
+        AC_SUBST(MB_LIBS, $ac_cv_search_clock_gettime)
+      fi
+      mb_cv_have_timer="yes"
     fi
-    if test "${ac_cv_search_clock_gettime}" != "none required"; then
-      AC_SUBST(MB_LIBS, $ac_cv_search_clock_gettime)
-    fi
-    mb_cv_have_timer="yes"
   fi
 fi
 
