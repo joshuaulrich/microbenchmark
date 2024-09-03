@@ -28,8 +28,8 @@ test.unit_arg_valid_values <- function()
 {
   check <- function(x, u)
   {
-    normu <- microbenchmark:::normalize_unit
-    checkIdentical(normu(u), attr(x, "unit"))
+    unit <- microbenchmark:::determine_unit
+    checkIdentical(unit(unit = u), attr(x, "unit"))
   }
 
   test <- function() {}
