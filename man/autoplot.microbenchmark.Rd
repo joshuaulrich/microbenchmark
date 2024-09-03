@@ -44,7 +44,7 @@ if (requireNamespace("ggplot2", quietly = TRUE)) {
     ggplot2::autoplot(tm)
 
     # add a custom title
-    ggplot2::autoplot(tm) + ggtitle("my timings")
+    ggplot2::autoplot(tm) + ggplot2::ggtitle("my timings")
 }
 }
 \author{
