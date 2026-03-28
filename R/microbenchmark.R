@@ -92,6 +92,7 @@
 #' if (requireNamespace("ggplot2")) {
 #'   ggplot2::autoplot(res)
 #' }
+#' # See also ?tinyplot.microbenchmark
 #'
 #' ## Example check usage
 #' my_check <- function(values) {
