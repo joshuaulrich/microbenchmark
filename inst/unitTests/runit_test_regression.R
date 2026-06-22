@@ -8,7 +8,7 @@ test.unit_is_object_errors <- function()
 
 test.unit_f_is_valid <- function()
 {
-  out <- try(microbenchmark(NULL, unit="f"), silent = TRUE)
+  out <- try(microbenchmark(rnorm(5e4), unit="f"), silent = TRUE)
   checkTrue(!inherits(out, "try-error"))
 }
 
@@ -32,7 +32,7 @@ test.unit_arg_valid_values <- function()
     checkIdentical(unit(unit = u), attr(x, "unit"))
   }
 
-  test <- function() {}
+  test <- function() rnorm(5e4)
 
   values <- c("nanoseconds", "ns",
               "microseconds", "us",
@@ -51,14 +51,14 @@ test.unit_arg_valid_values <- function()
 
 test.unit_is_null_does_not_error <- function()
 {
-  out <- try(print(microbenchmark(NULL, unit = NULL)), silent = TRUE)
+  out <- try(print(microbenchmark(rnorm(5e4), unit = NULL)), silent = TRUE)
   checkTrue(!inherits(out, "try-error"))
 }
 
 test.simple_timing <- function()
 {
   set.seed(21)
-  out <- microbenchmark(rnorm(1e4))
+  out <- microbenchmark(rnorm(5e4))
   checkTrue(all(out$time > 0))
 }
 
@@ -167,6 +167,6 @@ test.setup_expression_check_identical_failure <- function()
 
 test.print_returns_input <- function()
 {
-  x <- microbenchmark( 5 + 6, 6 + 7, times = 2)
+  x <- microbenchmark( rnorm(5e4), runif(5e4), times = 2)
   identical(x, print(x))
 }
